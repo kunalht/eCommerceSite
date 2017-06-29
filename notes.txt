@@ -1,0 +1,12 @@
+Alter table
+alter table products add column name varchar(20) after name;
+
+
+// DESC Name not allowed
+
+Create table items(ID INT AUTO_INCREMENT PRIMARY KEY,
+// name varchar(100),
+// image varchar(150),
+// price double(10,2),
+// description varchar(200),
+// longDesc varchar(600) )'
