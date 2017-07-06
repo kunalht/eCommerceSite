@@ -21,7 +21,7 @@ const c = new client({
 })
 app.use(require("express-session")({
     secret: "Secret text 1234",
-    resave: false,
+    resave: true,
     saveUninitialized: true
 }));
 app.use(passport.initialize())
@@ -33,14 +33,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(flash())
 passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user);
     console.log("serialized")
 })
-passport.deserializeUser(function (id, done) {
-    c.query("select * from user where email=:email", { email: id }, function (err, rows) {
-        done(err, rows[0])
-    })
-})
+passport.deserializeUser(function (user, done) {
+    done(null, user);
+});
+// passport.deserializeUser(function (id, done) {
+//     c.query("select * from user where email=:email", { email: id }, function (err, rows) {
+//         done(err, rows[0])
+//     })
+// })
 
 passport.use(new LocalStrategy({
     usernameField: 'email',
@@ -78,33 +81,44 @@ passport.use(new LocalStrategy({
     }
 ))
 
-// passport.use('local-login', new LocalStrategy({
-//     usernameField: 'email',
-//     passwordField: 'password',
-//     passReqToCallback: true
-// },
-//     function (email, password, done) {
-//         console.log("a")
-//         // console.log(email)
-//         c.query("select * from user where email=:email", { email: email }, function (err, foundUser) {
-//             if (err) {
-//                 console.log(err)
-//                 // return done(err)
-//             } else if (!foundUser.length) {
-//                 console.log("No user found")
-//                 // return done(null)
-//             } else {
-//                 console.log(foundUser)
-//                 // If user found
-//                 if (foundUser[0].password != password) {
-//                     console.log("Wrong password")
-//                     // return done(null, false)
-//                 }
-//                 return done(null, foundUser[0])
-//             }
-//         })
-//     }
-// ))
+passport.use('local-login', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+},
+    function (req, email, password, done) {
+        console.log(password)
+        c.query("select * from user where email=:email", { email: email }, function (err, foundUser) {
+            if (err) {
+                console.log(err)
+                // return done(err)
+            } else if (!foundUser.length) {
+                console.log("No user found")
+                // return done(null)
+            } else {
+                console.log(foundUser)
+                bcrypt.compare(password, foundUser[0].password, function (err, res) {
+                    if (res == false) {
+                        console.log('wrong password')
+                        return done(null, false)
+                    } else {
+                        req.login(foundUser[0], function (err) {
+                            if (err) {
+                                console.log(err)
+                            } else {
+                                console.log("done")
+                            }
+                        })
+                        return done(null, foundUser[0])
+                    }
+
+                })
+
+
+            }
+        })
+    }
+))
 
 const indexRoutes = require("./routes/index"),
     productRoutes = require("./routes/products")
@@ -120,6 +134,6 @@ app.get("/", function (req, res) {
 })
 
 
-app.listen("3001", function () {
+app.listen("3000", function () {
     console.log("Server started")
 })

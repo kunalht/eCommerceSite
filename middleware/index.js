@@ -13,6 +13,7 @@ const c = new client({
     db: 'ddif'
 })
 middlewareObj.getLogin = function (req, res) {
+    console.log(req.user)
     res.render("login")
 }
 
@@ -20,7 +21,10 @@ middlewareObj.getRegister = function (req, res) {
     res.render("register")
 }
 
-
+middlewareObj.logout = function(req, res){
+    req.logout()
+    res.redirect("back")
+}
 // middlewareObj.login = function (req, res) {
 //     passport.authenticate("local-login", {
 //         successRedirect: "/"
@@ -66,6 +70,14 @@ middlewareObj.getRegister = function (req, res) {
 //     }
 //     )
 // }
+
+middlewareObj.login = function (req, res) {
+    passport.authenticate("local-login")(req, res, function () {
+        console.log(req.isAuthenticated())
+        successRedirect("/")
+        failureRedirect("/register")
+    })
+}
 middlewareObj.register = function (req, res) {
     passport.authenticate("local")(req, res, function () {
         console.log("auth")
