@@ -4,7 +4,7 @@ const express = require("express"),
       productMiddleware = require("../middleware/products")
 
 router.get("/products", productMiddleware.getAllProducts)
-router.get("/new",productMiddleware.getNewProductForm)
+router.get("/products/new",productMiddleware.getNewProductForm)
 router.post("/products", productMiddleware.addNewProduct)
 
 module.exports = router;

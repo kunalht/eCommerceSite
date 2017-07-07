@@ -10,7 +10,8 @@ const express = require("express"),
     dbSchema = require('./middleware/dbSchema'),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
-    bcrypt = require("bcrypt-nodejs")
+    bcrypt = require("bcrypt-nodejs"),
+    session = require("express-session")
 
 const c = new client({
     host: 'localhost',
@@ -90,6 +91,7 @@ passport.use('local-login', new LocalStrategy({
                 // return done(err)
             } else if (!foundUser.length) {
                 console.log("No user found")
+                return done(null, false)
                 // return done(null)
             } else {
                 console.log(foundUser)
@@ -124,10 +126,7 @@ c.end()
 
 app.use(indexRoutes)
 app.use(productRoutes)
-app.get("/", function (req, res) {
-    res.send("Hello there")
-    console.log(req.isAuthenticated())
-})
+
 
 
 app.listen("3000", function () {

@@ -12,7 +12,6 @@ productMiddleware.getAllProducts = function (req, res) {
     c.query("select * from products", function (err, products) {
         if (err) { console.log(err) }
         else {
-            console.log(products)
             res.render("products/index", {products:products})
         }
     })

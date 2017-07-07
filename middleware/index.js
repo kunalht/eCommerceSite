@@ -13,7 +13,6 @@ const c = new client({
     db: 'ddif'
 })
 middlewareObj.getLogin = function (req, res) {
-    console.log(req.user)
     res.render("login")
 }
 
@@ -25,6 +24,8 @@ middlewareObj.logout = function(req, res){
     req.logout()
     res.redirect("back")
 }
-
+middlewareObj.homePage = function(req, res){
+    res.render("home")
+}
 c.end()
 module.exports = middlewareObj

@@ -4,6 +4,8 @@ const express = require("express"),
       passport = require("passport")
 
 
+router.get("/", middlewareObj.homePage)
+
 router.get("/login",middlewareObj.getLogin)
 // router.post("/login", middlewareObj.login)
 router.post('/login',
