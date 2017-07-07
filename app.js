@@ -39,11 +39,7 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
     done(null, user);
 });
-// passport.deserializeUser(function (id, done) {
-//     c.query("select * from user where email=:email", { email: id }, function (err, rows) {
-//         done(err, rows[0])
-//     })
-// })
+
 
 passport.use(new LocalStrategy({
     usernameField: 'email',

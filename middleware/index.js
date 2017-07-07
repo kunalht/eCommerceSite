@@ -25,66 +25,6 @@ middlewareObj.logout = function(req, res){
     req.logout()
     res.redirect("back")
 }
-// middlewareObj.login = function (req, res) {
-//     passport.authenticate("local-login", {
-//         successRedirect: "/"
-//     })(req, res, function () {
-//         c.query("select * from user where email=:email",
-//             { email: req.body.email },
-//             function (err, foundUser) {
-//                 if (err) {
-//                     console.log(err)
-//                 } else {
-//                     if (!foundUser.length) {
-//                         console.log("Wrong username")
-//                     } else {
-//                         if (bcrypt.compareSync(req.body.password,foundUser[0].password)) {
-//                             console.log("correct")
-//                             req.logIn(req.body.email,function(err){
-//                                 if(err){
-//                                     console.log(err)
-//                                     console.log("1")
-//                                 }else{
-//                                     console.log("here")
-//                                     res.redirect("/")
-//                                 }
-//                             })
-//                         } else {
-//                             console.log("Wrong")
-//                         }
-//                     }
-//                 }
-//             })
-//     })
-// }
-// middlewareObj.login = function (req, res) {
-//     passport.authenticate('local-login', {
-//         successRedirect: "/",
-//         failureRedirect: "/",
-//     },
-//     function(err, user,info){
-//     console.log(req.body)
-//         c.query("select * from user where email=:email",{email:req.body.email},function(err,foundUser){
-//             console.log(foundUser)
-//         })
-//     }
-//     )
-// }
-
-middlewareObj.login = function (req, res) {
-    passport.authenticate("local-login")(req, res, function () {
-        console.log(req.isAuthenticated())
-        successRedirect("/")
-        failureRedirect("/register")
-    })
-}
-middlewareObj.register = function (req, res) {
-    passport.authenticate("local")(req, res, function () {
-        console.log("auth")
-        console.log(req.isAuthenticated())
-        res.redirect("/");
-    })
-}
 
 c.end()
 module.exports = middlewareObj
