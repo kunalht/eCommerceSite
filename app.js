@@ -11,19 +11,49 @@ const express = require("express"),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
     bcrypt = require("bcrypt-nodejs"),
-    session = require("express-session")
+    session = require("express-session"),
+    sqlStore = require('express-mysql-session')(session)
 
 const c = new client({
     host: 'localhost',
     user: 'root',
     password: 'kunal',
     port: 3307,
-    db: 'ddif'
+    db: 'ddif',
+     createDatabaseTable: true,// Whether or not to create the sessions database table, if one does not already exist. 
+    connectionLimit: 1,// Number of connections when creating a connection pool 
+    schema: {
+        tableName: 'session',
+        columnNames: {
+            session_id: 'session_id',
+            expires: 'expires',
+            data: 'data'
+        }
+    }
 })
+var options = {
+ host: 'localhost',
+    user: 'root',
+    password: 'kunal',
+    port: 3307,
+    database: 'ddif',
+    createDatabaseTable: true,// Whether or not to create the sessions database table, if one does not already exist. 
+    connectionLimit: 1,// Number of connections when creating a connection pool 
+    schema: {
+        tableName: 'sessions',
+        columnNames: {
+            session_id: 'session_id',
+            expires: 'expires',
+            data: 'data'
+        }
+    }
+};
+var sessionStore = new sqlStore(options);
 app.use(require("express-session")({
     secret: "Secret text 1234",
+    store: sessionStore,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: false,
 }));
 app.use(passport.initialize())
 app.use(passport.session())
@@ -41,6 +71,10 @@ passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
+app.use(function (req, res, next) {
+    res.locals.session = req.session
+    next()
+})
 
 passport.use(new LocalStrategy({
     usernameField: 'email',
@@ -119,13 +153,15 @@ passport.use('local-login', new LocalStrategy({
 ))
 
 const indexRoutes = require("./routes/index"),
-    productRoutes = require("./routes/products")
+    productRoutes = require("./routes/products"),
+    cartRoutes = require("./routes/cart")
 
 c.end()
 
 
 app.use(indexRoutes)
 app.use(productRoutes)
+app.use(cartRoutes)
 
 
 

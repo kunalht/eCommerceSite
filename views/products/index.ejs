@@ -1,4 +1,7 @@
 <% products.forEach(function(product){ %>
     <%= product.name %>
     <%= product.id %>
+     <a href="/cart/<%= product.id %>"> Add to cart </a>
+    <br>
+    
 <% }) %>
