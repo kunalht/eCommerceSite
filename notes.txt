@@ -10,3 +10,54 @@ Create table items(ID INT AUTO_INCREMENT PRIMARY KEY,
 // price double(10,2),
 // description varchar(200),
 // longDesc varchar(600) )'
+
+not working
+create table customers(fname varchar(40),
+lname varchar(40),
+address varchar(255),
+city varchar(40),
+state varchar(40),
+zip varchar(40),
+country varchar(40),
+phone varchar(20),
+user_id INT NOT NULL,
+CONSTRAINT 'fk_user_id'
+foreign key (user_id) references user(id)
+ON DELETE CASCADE
+ON UPDATE RESTRICT
+) ENGINE = InnoDB;
+
+customers table working: 
+create table customers(fname varchar(40),lname varchar(40),address varchar(255),city varchar(40),state varchar(40),
+zip varchar(40),country varchar(40),phone varchar(20),user_id INT NOT NULL,
+foreign key (user_id) references user(id) ON DELETE CASCADE ON UPDATE RESTRICT) ENGINE = InnoDB;
+
+Query for join
+select * from customers join user ON customers.user_id = user.ID;
+
+cart table:
+create table cart(user_id INT NOT NULL,
+item_id INT NOT NULL,
+quantity INT DEFAULT 1,
+foreign key (user_id) references user(id),
+foreign key (item_id) references products(id)
+) ENGINE = InnoDB
+
+Copy from one db to other
+(copy from cartDB to orderDB)
+INSERT INTO copy SELECT * FROM original;
+CREATE TABLE copy LIKE original;
+ALTER TABLE copy DISABLE KEYS
+INSERT INTO copy SELECT * FROM original;
+ALTER TABLE copy ENABLE KEYS;
+
+SUM all the items
+select sum(quantity) from cart where user_id = 3;
+INSERT INTO copy SELECT * FROM original;
+
+ORDER table:
+create table orders(order_id INT AUTO_INCREMENT PRIMARY KEY,
+customer_id 
+orderDate
+amount
+ )

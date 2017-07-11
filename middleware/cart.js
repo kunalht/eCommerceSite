@@ -1,6 +1,6 @@
 const client = require('mariasql'),
-    session = require('express-session'),
-    sqlStore = require('express-mysql-session')
+    session = require('express-session')
+
 const cartMiddleware = {}
 const c = new client({
     host: 'localhost',
@@ -9,40 +9,59 @@ const c = new client({
     port: 3307,
     db: 'ddif',
 })
-    
+
 
 cartMiddleware.addToCart = function (req, res) {
-    if (!req.session.cart) {
-        req.session.cart = {}
+    if (req.isAuthenticated()) {
+        //check if item already exist with for loop
+        c.query('SELECT * FROM CART WHERE user_id=:userid AND item_id=:itemid',
+            { userid: req.user.ID, itemid: req.params.id },
+            function (err, items) {
+                if (err) {
+                    console.log(err)
+                } else {
+                    if (items.length > 0) {
+                        item_value = items[0].quantity
+                        item_value++
+                        //if it does increase the quantity
+                        c.query('UPDATE cart set quantity=:quantity where user_id=:userid AND item_id=:itemid',
+                            { quantity: item_value, userid: req.user.ID, itemid: req.params.id },
+                            function (err, items) {
+                                if (err) {
+                                    console.log(err)
+                                } else {
+                                    console.log(items)
+                                }
+                            })
+                        console.log(item_value)
+                    } else {
+                        //else create new iteam at length+1 location
+                        c.query('INSERT INTO CART(user_id,item_id) values(:userid,:itemid)',
+                            { userid: req.user.ID, itemid: req.params.id },
+                            function (err, rows) {
+                                if (err) {
+                                    console.log(err)
+                                } else {
+                                    console.log(rows)
+                                }
+                            })
+                    }
+                }
+            })
+        console.log(req.user.ID)
     }
-    req.session.cart = req.params.id
-    //check if item already exist with for loop
-    //if it does increase the quantity
-    //else create new iteam at length+1 location
-
-    console.log(req.session)
-    console.log(req.sessionID)
-    console.log(req.params.id)
-    // req.session.cart.id  = req.params.id
     res.redirect('/')
 }
 
-cartMiddleware.clear = function (req, res) {
-    req.session.destroy(function (err) {
-        // cannot access session here
-        if (err) {
-            console.log(err)
-        }
-    })
-    res.redirect('back')
-
+cartMiddleware.cart = function (req, res) {
+    const sess = req.session
+    if (req.isAuthenticated()) {
+        console.log(req.user.ID)
+    }
+    res.render('cart', { items: sess })
 }
 
-cartMiddleware.cart = function(req, res){
-    const sess = req.session
-    console.log(sess)
-    console.log(req.sessionID)
-    res.render('cart', {items : sess})
+cartMiddleware.removeFromCart= function(req, res){
 }
 c.end()
 

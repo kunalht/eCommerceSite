@@ -11,8 +11,7 @@ const express = require("express"),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
     bcrypt = require("bcrypt-nodejs"),
-    session = require("express-session"),
-    sqlStore = require('express-mysql-session')(session)
+    session = require("express-session")
 
 const c = new client({
     host: 'localhost',
@@ -20,38 +19,11 @@ const c = new client({
     password: 'kunal',
     port: 3307,
     db: 'ddif',
-     createDatabaseTable: true,// Whether or not to create the sessions database table, if one does not already exist. 
-    connectionLimit: 1,// Number of connections when creating a connection pool 
-    schema: {
-        tableName: 'session',
-        columnNames: {
-            session_id: 'session_id',
-            expires: 'expires',
-            data: 'data'
-        }
-    }
+
 })
-var options = {
- host: 'localhost',
-    user: 'root',
-    password: 'kunal',
-    port: 3307,
-    database: 'ddif',
-    createDatabaseTable: true,// Whether or not to create the sessions database table, if one does not already exist. 
-    connectionLimit: 1,// Number of connections when creating a connection pool 
-    schema: {
-        tableName: 'sessions',
-        columnNames: {
-            session_id: 'session_id',
-            expires: 'expires',
-            data: 'data'
-        }
-    }
-};
-var sessionStore = new sqlStore(options);
+
 app.use(require("express-session")({
     secret: "Secret text 1234",
-    store: sessionStore,
     resave: true,
     saveUninitialized: false,
 }));
@@ -65,16 +37,11 @@ app.use(cookieParser())
 app.use(flash())
 passport.serializeUser(function (user, done) {
     done(null, user);
-    console.log("serialized")
 })
 passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
-app.use(function (req, res, next) {
-    res.locals.session = req.session
-    next()
-})
 
 passport.use(new LocalStrategy({
     usernameField: 'email',
@@ -84,7 +51,6 @@ passport.use(new LocalStrategy({
     function (req, email, password, done) {
         console.log("register")
         c.query("select * from user where email= :email", { email: email }, function (err, rows) {
-            console.log(rows)
             if (err) {
                 return done(err)
             } else {
@@ -128,7 +94,6 @@ passport.use('local-login', new LocalStrategy({
                 return done(null, false)
                 // return done(null)
             } else {
-                console.log(foundUser)
                 bcrypt.compare(password, foundUser[0].password, function (err, res) {
                     if (res == false) {
                         console.log('wrong password')
@@ -137,16 +102,12 @@ passport.use('local-login', new LocalStrategy({
                         req.login(foundUser[0], function (err) {
                             if (err) {
                                 console.log(err)
-                            } else {
-                                console.log("done")
                             }
                         })
                         return done(null, foundUser[0])
                     }
 
                 })
-
-
             }
         })
     }
