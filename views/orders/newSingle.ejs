@@ -1,0 +1,23 @@
+
+Your order details are <br>
+<%= foundProduct[0].name %>
+<br>
+Price: <%= foundProduct[0].price %>
+
+<br><br>
+Your address & contact details:
+<br>
+<!-- Add a way to select address using button onClick and form hidden element -->
+<!-- send address id, item id and quantity through post request -->
+<% foundAddress.forEach(function(add){ %>
+    <%= add.address %>
+    <br>
+<% }) %>
+
+<br>
+<%= console.log(quantity) %>
+<!-- Send address id here -->
+<form action="/order/<%= foundProduct[0].id %>?q=<%= quantity %>&addr=2" method="POST">
+<button>Place order
+</button>
+</form>

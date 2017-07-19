@@ -12,6 +12,7 @@ const c = new client({
     port: 3307,
     db: 'ddif'
 })
+
 middlewareObj.getLogin = function (req, res) {
     res.render("login")
 }
@@ -26,6 +27,11 @@ middlewareObj.logout = function(req, res){
 }
 middlewareObj.homePage = function(req, res){
     res.render("home")
+}
+
+middlewareObj.getProfile = function(req , res){
+    // c.query("SELECT * FROM customers where ")
+    res.render("profile")
 }
 c.end()
 module.exports = middlewareObj

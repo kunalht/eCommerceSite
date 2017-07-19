@@ -19,4 +19,6 @@ router.get("/register",middlewareObj.getRegister)
 // router.post("/register",middlewareObj.register)
 router.get("/logout", middlewareObj.logout)
 
+router.get('/profile/edit',middlewareObj.getProfile)
+
 module.exports = router;

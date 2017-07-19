@@ -115,7 +115,8 @@ passport.use('local-login', new LocalStrategy({
 
 const indexRoutes = require("./routes/index"),
     productRoutes = require("./routes/products"),
-    cartRoutes = require("./routes/cart")
+    cartRoutes = require("./routes/cart"),
+    orderRoutes = require("./routes/order")
 
 c.end()
 
@@ -123,6 +124,7 @@ c.end()
 app.use(indexRoutes)
 app.use(productRoutes)
 app.use(cartRoutes)
+app.use(orderRoutes)
 
 
 
