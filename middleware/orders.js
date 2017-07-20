@@ -73,7 +73,7 @@ orderMiddleware.orderPostSingle = function (req, res) {
         })
 }
 
-orderMiddleware.newOrder = async (req, res) =>{
+orderMiddleware.newOrder = async (req, res) => {
     res.send("aaa")
 }
 
