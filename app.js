@@ -6,12 +6,13 @@ const express = require("express"),
     cookieParser = require('cookie-parser'),
     flash = require('connect-flash'),
     middlewareObj = require("./middleware/index"),
-    async = require("async"),
+    // async = require("async"),
     dbSchema = require('./middleware/dbSchema'),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
     bcrypt = require("bcrypt-nodejs"),
     session = require("express-session")
+
 
 const c = new client({
     host: 'localhost',

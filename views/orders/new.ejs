@@ -1,10 +1,14 @@
 order
 Your order details are <br>
-<%= foundProduct[0].name %>
-<br>
-Price: <%= foundProduct[0].price %>
+<% cart.forEach(function(item){ %>
+    <%= item.item_id %>
+Q    <%= item.quantity %>
+    <br>
+<% }) %>
 
 <br><br>
+Total amount 
+<%= total %>
 Your address & contact details:
 
 
