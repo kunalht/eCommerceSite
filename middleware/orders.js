@@ -73,9 +73,26 @@ orderMiddleware.orderPostSingle = function (req, res) {
         })
 }
 
-orderMiddleware.newOrder = async (req, res) => {
-    res.send("aaa")
-}
+// orderMiddleware.newOrder = async (req, res) => {
+//     var total = 0
+//     var curcr_total = 0
+// //    await console.log("a")
+// //      console.log("b")
+//     // var b = await console.log("a" + A)
+//     var A = await c.query('select * from cart where user_id=:userId',
+//         { userId: req.user.ID }, function(err,foundProduct){
+//             console.log(foundProduct)
+//         })
+//         console.log(A)
+//     // var ab = await c.query('select * from cart',function aa(err,myP){
+//     //     console.log(myP)
+//     //     return myP
+//     // })
+//     // c.query('select *')
+//     //     .then()
+//      console.log("aaa")
+//     // await res.redirect("/")
+// }
 
 // orderMiddleware.newOrder = function (req, res) {
 //     var total = 0
@@ -110,6 +127,39 @@ orderMiddleware.newOrder = async (req, res) => {
 //             }
 //         })
 // }
+// orderMiddleware.newOrder = async (req, res) => {
+//     var total = 0
+//     var curr_total = 0
+//     // get items from cart
+//    var A=  c.query('select * from cart where user_id=:userId',
+//         { userId: req.user.ID }, async (err, cart) => {
+//             if (err) {
+//                 console.log(err)
+//             } else {
+//                  cart.forEach(async (item) => {
+//                     // Find item from DB and check their price
+//                     await c.query('select * from products where id=:id',
+//                         { id: item.item_id },
+//                         async (err, foundItem) =>{
+//                             if (err) {
+//                                 console.log(err)
+//                             } else {
+//                                 curr_total = foundItem[0].price * item.quantity
+//                                 console.log("currenttotal" + curr_total)
+//                                 total += curr_total
+//                                 console.log(total)
+//                             }
+//                         })
+//                 })
+//                 await console.log(total)
+//                 // await console.log(curr_total)
+//                 // Calculate total price
+//                 // Multiply all items with their quantity
+//                 await res.render('orders/new', { cart: cart, total: total })
+//             }
+//         })
+// }
+
 // POST ORDER
 // send req.params.id to the ejs file 
 module.exports = orderMiddleware
