@@ -94,39 +94,47 @@ orderMiddleware.orderPostSingle = function (req, res) {
 //     // await res.redirect("/")
 // }
 
-// orderMiddleware.newOrder = function (req, res) {
-//     var total = 0
-//     var curr_total = 0
-//     // get items from cart
-//     c.query('select * from cart where user_id=:userId',
-//         { userId: req.user.ID }, function (err, cart) {
-//             if (err) {
-//                 console.log(err)
-//             } else {
+orderMiddleware.newOrder = function (req, res) {
+    var total = 0
+    var curr_total = 0
+    // get items from cart
+    c.query('select * from cart where user_id=:userId',
+        { userId: req.user.ID }, function (err, cart) {
+            if (err) {
+                console.log(err)
+            } else {
+                for (var i = 0; i < cart.length; i++) {
+                    // Find item from DB and check their price
+                    c.query('select * from products where id=:id',
+                        { id: cart[i].item_id },
+                        function (err, foundItem) {
+                            if (err) {
+                                console.log(err)
+                            } else {
+                                console.log(i)
+                                // console.log(foundItem)
+                                // console.log(cart[i])
+                                // curr_total = foundItem[0].price * cart[i].quantity
+                                // console.log("currenttotal" + curr_total)
+                                // total += curr_total
+                                // console.log(total)
+                            }
+                        })
+                    if (i == cart.length - 1) {
+                        console.log("DONE")
+                        res.render('orders/new', { cart: cart, total: total })
 
-//                 cart.forEach(function (item) {
-//                     // Find item from DB and check their price
-//                     c.query('select * from products where id=:id',
-//                         { id: item.item_id },
-//                         function (err, foundItem) {
-//                             if (err) {
-//                                 console.log(err)
-//                             } else {
-//                                 curr_total = foundItem[0].price * item.quantity
-//                                 console.log("currenttotal" + curr_total)
-//                                 total += curr_total
-//                                 console.log(total)
-//                             }
-//                         })
-//                 })
-//                 console.log(total)
-//                 console.log(curr_total)
-//                 // Calculate total price
-//                 // Multiply all items with their quantity
-//                 res.render('orders/new', { cart: cart, total: total })
-//             }
-//         })
-// }
+                    }
+                    // console.log(cart[i])
+
+                }
+                // console.log(total)
+                // console.log(curr_total)
+                // Calculate total price
+                // Multiply all items with their quantity
+            }
+        })
+}
 // orderMiddleware.newOrder = async (req, res) => {
 //     var total = 0
 //     var curr_total = 0
