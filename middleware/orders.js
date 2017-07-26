@@ -105,7 +105,6 @@ orderMiddleware.newOrder = function (req, res) {
 }
 
 orderMiddleware.postOrder = function (req, res) {
-    console.log("POSTED")
     // insert into order
     // copy data from cart to order_items
 
@@ -151,7 +150,6 @@ orderMiddleware.postOrder = function (req, res) {
                                 })
                         }
                     })
-
             }
         })
 }
