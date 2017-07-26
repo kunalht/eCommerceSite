@@ -73,101 +73,88 @@ orderMiddleware.orderPostSingle = function (req, res) {
         })
 }
 
-// orderMiddleware.newOrder = async (req, res) => {
-//     var total = 0
-//     var curcr_total = 0
-// //    await console.log("a")
-// //      console.log("b")
-//     // var b = await console.log("a" + A)
-//     var A = await c.query('select * from cart where user_id=:userId',
-//         { userId: req.user.ID }, function(err,foundProduct){
-//             console.log(foundProduct)
-//         })
-//         console.log(A)
-//     // var ab = await c.query('select * from cart',function aa(err,myP){
-//     //     console.log(myP)
-//     //     return myP
-//     // })
-//     // c.query('select *')
-//     //     .then()
-//      console.log("aaa")
-//     // await res.redirect("/")
-// }
-
 orderMiddleware.newOrder = function (req, res) {
     var total = 0
     var curr_total = 0
     // get items from cart
-    c.query('select * from cart where user_id=:userId',
-        { userId: req.user.ID }, function (err, cart) {
+    c.query('select * from cart join products ON cart.item_id=products.id where user_id=:userId',
+        { userId: req.user.ID }, function (err, foundProduct) {
             if (err) {
                 console.log(err)
             } else {
-                for (var i = 0; i < cart.length; i++) {
-                    // Find item from DB and check their price
-                    c.query('select * from products where id=:id',
-                        { id: cart[i].item_id },
-                        function (err, foundItem) {
-                            if (err) {
-                                console.log(err)
-                            } else {
-                                console.log(i)
-                                // console.log(foundItem)
-                                // console.log(cart[i])
-                                // curr_total = foundItem[0].price * cart[i].quantity
-                                // console.log("currenttotal" + curr_total)
-                                // total += curr_total
-                                // console.log(total)
-                            }
-                        })
-                    if (i == cart.length - 1) {
-                        console.log("DONE")
-                        res.render('orders/new', { cart: cart, total: total })
-
+                var total = 0
+                var curcr_total = 0
+                foundProduct.forEach(function (item) {
+                    curr_total = item.price * item.quantity
+                    total += curr_total
+                })
+                //address find
+                c.query('select * from user_addr where user_id=:id',
+                    { id: req.user.ID },
+                    function (err, foundAddress) {
+                        if (err) {
+                            console.log(err)
+                        } else {
+                            //Show all addresses in the page
+                            res.render("orders/new", { foundProduct: foundProduct, total: total, foundAddress: foundAddress })
+                        }
                     }
-                    // console.log(cart[i])
-
-                }
-                // console.log(total)
-                // console.log(curr_total)
-                // Calculate total price
-                // Multiply all items with their quantity
+                )
             }
         })
 }
-// orderMiddleware.newOrder = async (req, res) => {
-//     var total = 0
-//     var curr_total = 0
-//     // get items from cart
-//    var A=  c.query('select * from cart where user_id=:userId',
-//         { userId: req.user.ID }, async (err, cart) => {
-//             if (err) {
-//                 console.log(err)
-//             } else {
-//                  cart.forEach(async (item) => {
-//                     // Find item from DB and check their price
-//                     await c.query('select * from products where id=:id',
-//                         { id: item.item_id },
-//                         async (err, foundItem) =>{
-//                             if (err) {
-//                                 console.log(err)
-//                             } else {
-//                                 curr_total = foundItem[0].price * item.quantity
-//                                 console.log("currenttotal" + curr_total)
-//                                 total += curr_total
-//                                 console.log(total)
-//                             }
-//                         })
-//                 })
-//                 await console.log(total)
-//                 // await console.log(curr_total)
-//                 // Calculate total price
-//                 // Multiply all items with their quantity
-//                 await res.render('orders/new', { cart: cart, total: total })
-//             }
-//         })
-// }
 
+orderMiddleware.postOrder = function (req, res) {
+    console.log("POSTED")
+    // insert into order
+    // copy data from cart to order_items
+
+    // Check the total price
+    var total = 0
+    var curr_total = 0
+    // get items from cart
+    c.query('select * from cart join products ON cart.item_id=products.id where user_id=:userId',
+        { userId: req.user.ID }, function (err, foundProduct) {
+            if (err) {
+                console.log(err)
+            } else {
+                var total = 0
+                var curcr_total = 0
+                foundProduct.forEach(function (item) {
+                    curr_total = item.price * item.quantity
+                    total += curr_total
+                })
+                // insert into order 
+                c.query('insert into orders(addr_id,user_id,amount) values (:addr_id,:user_id,:amount)',
+                    { addr_id: 2, user_id: req.user.ID, amount: total }, function (err, newOrder) {
+                        if (err) {
+                            console.log(err)
+                        } else {
+                            // order_id = newOrder.info.insertId
+                            console.log(newOrder.info.insertId)
+                            // copy items to order_item
+                            c.query('insert into order_item(order_id,item_id,quantity) select :order_id,item_id,quantity from cart where user_id= :user_id',
+                                { order_id: newOrder.info.insertId, user_id: req.user.ID }, function (err, addeditems) {
+                                    if (err) {
+                                        console.log(err)
+                                    } else {
+                                        c.query('delete from cart where user_id=:userid',
+                                            { userid: req.user.ID }, function (err, clearedCart) {
+                                                if (err) {
+                                                    console.log(err)
+                                                } else {
+                                                    res.send("done")
+                                                    // clearcart
+                                                }
+                                            })
+                                    }
+                                })
+                        }
+                    })
+
+            }
+        })
+}
 // POST ORDER
 // send req.params.id to the ejs file 
 module.exports = orderMiddleware

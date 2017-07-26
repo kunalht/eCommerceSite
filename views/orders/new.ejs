@@ -1,15 +1,27 @@
 order
 Your order details are <br>
-<% cart.forEach(function(item){ %>
-    <%= item.item_id %>
-Q    <%= item.quantity %>
+
+<% foundProduct.forEach(function(product){ %>
+<%= product.name %>
+<%= product.price %>
+<br>
+
+<% }) %>
+<br><br>
+Total amount : <%= total %> <br>
+    Your address & contact details:
+<br>
+<!-- Add a way to select address using button onClick and form hidden element -->
+<!-- send address id, item id and quantity through post request -->
+<% foundAddress.forEach(function(add){ %>
+    <%= add.address %>
     <br>
 <% }) %>
 
-<br><br>
-Total amount 
-<%= total %>
-Your address & contact details:
-
+<br>
+<form action="/order" method="POST">
+<button>Place order
+</button>
+</form>
 
 Place order

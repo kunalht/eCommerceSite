@@ -30,6 +30,8 @@ ON DELETE CASCADE
 Query for join
 select * from user_addr join user ON user_addr.user_id = user.ID;
 
+select * from cart join products ON cart.item_id = products.id 
+
 cart table:
 create table cart(user_id INT NOT NULL,
 item_id INT NOT NULL,
@@ -45,6 +47,10 @@ CREATE TABLE copy LIKE original;
 ALTER TABLE copy DISABLE KEYS
 INSERT INTO copy SELECT * FROM original;
 ALTER TABLE copy ENABLE KEYS;
+ COpy from cart to order:
+ insert into order_item(item_id,quantity) select item_id,quantity from cart where user_id=15;
+with data pre existed
+insert into order_item(order_id,item_id,quantity) select 5,item_id,quantity from cart where user_id 15;
 
 SUM all the items
 select sum(quantity) from cart where user_id = 3;
@@ -67,3 +73,4 @@ quantity INT,
 foreign key (order_id) references orders(order_id),
 foreign key (item_id) references products(id)
 )
+
