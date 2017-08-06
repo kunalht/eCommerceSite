@@ -1,2 +1,9 @@
-hello
-<%= items.cart %>
+Items in cart
+<br>
+<% items.forEach(function(item){ %>
+    <%= item.item_id %>
+    <%= item.name %>
+    <%= item.price %>
+    <%= item.quantity %>
+    <br>
+<% }) %>

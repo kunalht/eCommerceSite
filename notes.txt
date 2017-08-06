@@ -74,3 +74,9 @@ foreign key (order_id) references orders(order_id),
 foreign key (item_id) references products(id)
 )
 
+create table user_fb(
+    id varchar(256),
+    email varchar(100),
+    name varchar(256),
+    token varchar(256)
+)

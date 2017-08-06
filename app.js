@@ -10,8 +10,11 @@ const express = require("express"),
     dbSchema = require('./middleware/dbSchema'),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
+    FacebookStrategy = require("passport-facebook"),
     bcrypt = require("bcrypt-nodejs"),
-    session = require("express-session")
+    session = require("express-session"),
+    configAuth = require('./config/auth')
+
 
 
 const c = new client({
@@ -56,13 +59,14 @@ passport.use(new LocalStrategy({
                 return done(err)
             } else {
                 if (rows.length) {
+                    console.log("Already exist")
                     return done(null, false)
                 } else {
                     var newUser = {}
                     newUser.email = email
                     newUser.password = password
                     var hash = bcrypt.hashSync(password)
-                    c.query('insert into user (email, password) values (:email,:password)',
+                    c.query('insert into user (email, password,loginwith) values (:email,:password,"email")',
                         { email: newUser.email, password: hash },
                         function (err, rows) {
                             req.login(newUser, function (err) {
@@ -113,7 +117,45 @@ passport.use('local-login', new LocalStrategy({
         })
     }
 ))
+passport.use(new FacebookStrategy({
+    clientID: configAuth.facebookAuth.clientID,
+    clientSecret: configAuth.facebookAuth.clientSecret,
+    callbackURL: configAuth.facebookAuth.callbackURL,
+    profileFields: ['id', 'displayName', 'name', 'email']
+}, function (accessToken, refreshToken, profile, cb) {
+    process.nextTick(function () {
+        // c.query('select * from user where id=15', function (err, user) {
+        c.query('select * from user_fb where pid=:pid', { pid: profile.id }, function (err, user) {
 
+            if (err) {
+                return cb(err)
+            } if (user.length > 0) {
+                //Add items this way
+                // user[0].test = "aa"
+                return cb(null, user[0])
+            } else {
+                console.log(user.length)
+                var newUser = {}
+                newUser.pid = profile.id
+                newUser.token = accessToken
+                newUser.name = profile.name.givenName + ' ' + profile.name.familyName
+                newUser.email = (profile.emails[0].value || '').toLowerCase()
+                c.query('insert into user(email,fname,lname,oauth_id,loginwith) values(:email,:fname,:lname,:oauth_id,:loginwith)',
+                    { email: newUser.email, fname: profile.name.givenName, lname: profile.name.familyName, oauth_id: newUser.id, loginwith: "facebook" },
+                    function (err, addedUser) {
+                        newUser.id = addedUser.info.insertId
+                        c.query('insert into user_fb(pid,id,email,name,token) values(:pid,:id,:email,:name,:token)',
+                            { pid: newUser.pid, id:addedUser.info.insertId,email: newUser.email, name: newUser.name, token: newUser.token },
+                            function (err, rows) {
+                                // req.login(newUser, function (err) {
+                                return cb(null, newUser)
+                            })
+                    })
+                // })
+            }
+        })
+    })
+}))
 const indexRoutes = require("./routes/index"),
     productRoutes = require("./routes/products"),
     cartRoutes = require("./routes/cart"),

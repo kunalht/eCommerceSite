@@ -36,6 +36,7 @@ cartMiddleware.addToCart = function (req, res) {
                         console.log(item_value)
                     } else {
                         //else create new iteam at length+1 location
+                        console.log(req.user.ID)
                         c.query('INSERT INTO CART(user_id,item_id) values(:userid,:itemid)',
                             { userid: req.user.ID, itemid: req.params.id },
                             function (err, rows) {
@@ -48,20 +49,21 @@ cartMiddleware.addToCart = function (req, res) {
                     }
                 }
             })
-        console.log(req.user.ID)
     }
     res.redirect('/')
 }
 
 cartMiddleware.cart = function (req, res) {
-    const sess = req.session
     if (req.isAuthenticated()) {
-        console.log(req.user.ID)
+        c.query('select * from cart join products ON cart.item_id=products.id where user_id=:userId',
+            { userId: req.user.ID }, function (err, cartItems) {
+                console.log(cartItems)
+                res.render('cart',{items:cartItems} )
+            })
     }
-    res.render('cart', { items: sess })
 }
 
-cartMiddleware.removeFromCart= function(req, res){
+cartMiddleware.removeFromCart = function (req, res) {
 }
 c.end()
 
