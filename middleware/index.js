@@ -26,8 +26,6 @@ middlewareObj.logout = function(req, res){
     res.redirect("back")
 }
 middlewareObj.homePage = function(req, res){
-    // console.log(req.user.ID+"big")
-    // console.log(req.user.id + "small")
     res.render("home")
 }
 
