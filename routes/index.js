@@ -4,7 +4,11 @@ const express = require("express"),
   passport = require("passport")
 
 
-router.get("/", middlewareObj.homePage)
+router.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+})
+  router.get("/", middlewareObj.homePage)
 
 router.get("/login", middlewareObj.getLogin)
 // router.post("/login", middlewareObj.login)

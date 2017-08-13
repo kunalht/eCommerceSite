@@ -9,7 +9,6 @@ const c = new client({
 })
 
 productMiddleware.getAllProducts = function (req, res) {
-    console.log(req.user)
     c.query("select * from products", function (err, products) {
         if (err) { console.log(err) }
         else {

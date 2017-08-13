@@ -27,6 +27,7 @@ middlewareObj.logout = function(req, res){
 }
 middlewareObj.homePage = function(req, res){
     res.render("home")
+    console.log(req.user)
 }
 
 middlewareObj.getProfile = function(req , res){

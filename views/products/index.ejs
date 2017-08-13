@@ -1,8 +1,36 @@
-<% products.forEach(function(product){ %>
-    <%= product.name %>
-    <%= product.id %>
-     <a href="/cart/<%= product.id %>"> Add to cart </a>
-     <a href="/order/new/<%= product.id %>"> Order this item </a>
-    <br>
-    
+<% include ../partials/header.ejs %>
+
+
+<div class="row"> 
+  <div class="col m3">
+    categories
+  </div>
+  <div class="col m9">
+  <% products.forEach(function(product){ %>
+        <div class="col s6 m4">
+          <div class="card medium">
+            <div class="card-image">
+              <img src="https://selbye.com/Maddy/514e4ea5-0f1c-4bd8-b7b4-be51dfc44501.jpeg">
+              <span class="card-title">Product 1</span>
+            </div>
+            <div class="card-content">
+              <h5 class="center"><%= product.name %> </h5>
+              <%= product.price %>
+            </div>
+            <div class="card-action">
+              <div class="row">
+                <div class="col m5">
+              <a href="/order/new/<%= product.id %>" style="font-size:95%">Buy now</a>
+                </div>
+             <div class="col m7">
+              <a href="/cart/<%= product.id %>" style="font-size:95%">Add to cart</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 <% }) %>
+  </div>
+</div>
+    
+<% include ../partials/footer.ejs %>

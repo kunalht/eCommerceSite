@@ -46,6 +46,13 @@
 <body>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
+    <!-- Dropdown Structure -->
+    <ul id="dropdown1" class="dropdown-content">
+        <li><a href="#!">Your orders</a></li>
+        <li><a href="#!">Cart</a></li>
+        <li class="divider"></li>
+        <li><a href="#!">three</a></li>
+    </ul>
     <nav class="">
         <div class="nav-wrapper">
             <a href="#" class="brand-logo red-text">Logo</a>
@@ -64,8 +71,13 @@
                 </li>
             </ul>
             <ul class="hide-on-med-and-down right">
-                <li><a class="waves-effect waves-light modal-trigger" href="#loginModal">Login</a></li>
-                <li><a class="waves-effect waves-light modal-trigger" href="#registerModal">Register</a></li>
+                <% if(currentUser!= null){ %>
+                    <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hi <%= currentUser.email %> <i class="material-icons right">arrow_drop_down</i></a></li>
+                    <li><a href="/logout"> Logout </li>
+                    <% }else{ %>
+                        <li><a class="waves-effect waves-light modal-trigger" href="#loginModal">Login</a></li>
+                        <li><a class="waves-effect waves-light modal-trigger" href="#registerModal">Register</a></li>
+                        <% } %>
             </ul>
         </div>
     </nav>
@@ -82,6 +94,8 @@
             });
         });
         $(document).ready(function () {
+            $(".dropdown-button").dropdown();
+
             // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
             $('#loginModal').modal();
             $('#registerModal').modal();
@@ -142,7 +156,7 @@
                             <label for="first_name">First Name</label>
                         </div>
                         <div class="input-field col s6">
-                            <input name= "lname" id="last_name" type="text" class="validate">
+                            <input name="lname" id="last_name" type="text" class="validate">
                             <label for="last_name">Last Name</label>
                         </div>
                     </div>

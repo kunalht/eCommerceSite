@@ -51,8 +51,6 @@ orderMiddleware.orderPostSingle = function (req, res) {
             if (err) {
                 console.log(err)
             } else {
-                console.log(req.query)
-
                 var itemId = foundProduct[0].id
                 // multiply that product price with quantity
                 var totalAmount = foundProduct[0].price * req.query.q
@@ -130,7 +128,6 @@ orderMiddleware.postOrder = function (req, res) {
                             console.log(err)
                         } else {
                             // order_id = newOrder.info.insertId
-                            console.log(newOrder.info.insertId)
                             // copy items to order_item
                             c.query('insert into order_item(order_id,item_id,quantity) select :order_id,item_id,quantity from cart where user_id= :user_id',
                                 { order_id: newOrder.info.insertId, user_id: req.user.ID }, function (err, addeditems) {
