@@ -17,6 +17,7 @@
     "express": "^4.15.3",
     "express-mysql-session": "^1.2.1",
     "express-session": "^1.15.3",
+    "file-system": "^2.2.2",
     "jimp": "^0.2.28",
     "mariasql": "^0.2.6",
     "material-components-web": "^0.16.0",

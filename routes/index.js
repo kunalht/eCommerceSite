@@ -8,7 +8,7 @@ router.use(function(req, res, next){
     res.locals.currentUser = req.user;
     next();
 })
-  router.get("/", middlewareObj.homePage)
+  router.get("/" ,middlewareObj.homePage)
 
 router.get("/login", middlewareObj.getLogin)
 // router.post("/login", middlewareObj.login)
@@ -42,4 +42,7 @@ router.get('/login/facebook/return',
       res.redirect("/")
     }
   })
+
+  //If it's an admin account
+  router.get('/orders',middlewareObj.checkisAdmin,middlewareObj.orders)
 module.exports = router;

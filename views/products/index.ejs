@@ -6,30 +6,36 @@
     categories
   </div>
   <div class="col m9">
-  <% products.forEach(function(product){ %>
-        <div class="col s6 m4">
+    <% if( products.length>((page-1)*9+9)){ %>
+     <% max = ((page-1)*9+9) %>
+    <% }else{ %>
+     <% max = products.length %>
+   <% } %>
+    <% for(var i = (page-1)*9;i<max ;i++){ %>
+      <div class="col s6 m4">
           <div class="card medium">
             <div class="card-image">
-              <img src="https://selbye.com/Maddy/514e4ea5-0f1c-4bd8-b7b4-be51dfc44501.jpeg">
+              <img src="<%= products[i].image %>">
+              <!-- <img src="https://selbye.com/Maddy/514e4ea5-0f1c-4bd8-b7b4-be51dfc44501.jpeg"> -->
               <span class="card-title">Product 1</span>
             </div>
             <div class="card-content">
-              <h5 class="center"><%= product.name %> </h5>
-              <%= product.price %>
+              <h5 class="center"><%= products[i].name %> </h5>
+              <%= products[i].price %>
             </div>
             <div class="card-action">
               <div class="row">
                 <div class="col m5">
-              <a href="/order/new/<%= product.id %>" style="font-size:95%">Buy now</a>
+              <a href="/order/new/<%= products[i].id %>" style="font-size:95%">Buy now</a>
                 </div>
              <div class="col m7">
-              <a href="/cart/<%= product.id %>" style="font-size:95%">Add to cart</a>
+              <a href="/cart/<%= products[i].id %>" style="font-size:95%">Add to cart</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-<% }) %>
+      <% } %>
   </div>
 </div>
     
