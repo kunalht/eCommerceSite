@@ -44,5 +44,5 @@ router.get('/login/facebook/return',
   })
 
   //If it's an admin account
-  router.get('/orders',middlewareObj.checkisAdmin,middlewareObj.orders)
+  router.get('/orders',middlewareObj.checkisAdmin ,middlewareObj.orders)
 module.exports = router;
