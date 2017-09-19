@@ -72,34 +72,36 @@ orderMiddleware.orderPostSingle = function (req, res) {
 }
 
 orderMiddleware.newOrder = function (req, res) {
-    var total = 0
-    var curr_total = 0
-    // get items from cart
-    c.query('select * from cart join products ON cart.item_id=products.id where user_id=:userId',
-        { userId: req.user.ID }, function (err, foundProduct) {
-            if (err) {
-                console.log(err)
-            } else {
-                var total = 0
-                var curcr_total = 0
-                foundProduct.forEach(function (item) {
-                    curr_total = item.price * item.quantity
-                    total += curr_total
-                })
-                //address find
-                c.query('select * from user_addr where user_id=:id',
-                    { id: req.user.ID },
-                    function (err, foundAddress) {
-                        if (err) {
-                            console.log(err)
-                        } else {
-                            //Show all addresses in the page
-                            res.render("orders/new", { foundProduct: foundProduct, total: total, foundAddress: foundAddress })
-                        }
-                    }
-                )
-            }
-        })
+    res.send("hello")
+    // res.render("orders/new")
+    // var total = 0
+    // var curr_total = 0
+    // // get items from cart
+    // c.query('select * from cart join products ON cart.item_id=products.id where user_id=:userId',
+    //     { userId: req.user.ID }, function (err, foundProduct) {
+    //         if (err) {
+    //             console.log(err)
+    //         } else {
+    //             var total = 0
+    //             var curcr_total = 0
+    //             foundProduct.forEach(function (item) {
+    //                 curr_total = item.price * item.quantity
+    //                 total += curr_total
+    //             })
+    //             //address find
+    //             c.query('select * from user_addr where user_id=:id',
+    //                 { id: req.user.ID },
+    //                 function (err, foundAddress) {
+    //                     if (err) {
+    //                         console.log(err)
+    //                     } else {
+    //                         //Show all addresses in the page
+    //                         res.render("orders/new", { foundProduct: foundProduct, total: total, foundAddress: foundAddress })
+    //                     }
+    //                 }
+    //             )
+    //         }
+    //     })
 }
 
 orderMiddleware.postOrder = function (req, res) {

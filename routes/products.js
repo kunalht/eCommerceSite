@@ -33,7 +33,8 @@ function resize(req, res, next) {
             var photo = jimp.read(req.file.buffer)
             // console.log(photo)
             jimp.read(req.file.buffer, function (err, image) {
-                  image.resize(600, jimp.AUTO)
+                  image.resize(536, 498)
+                  // image.resize(600, jimp.AUTO)
                   image.write("images/" + req.body.photo)
             })
 
@@ -42,7 +43,7 @@ function resize(req, res, next) {
       }
 }
 router.get("/products", productMiddleware.getAllProducts)
-router.get("/products/new", middlewareObj.checkisAdmin,productMiddleware.getNewProductForm)
+router.get("/products/new", middlewareObj.checkisAdmin, productMiddleware.getNewProductForm)
 router.post("/products", upload.single('photo'), resize, productMiddleware.addNewProduct)
 // router.post("/products", upload.single('photo'), function (req, res) {
 //       console.log(req.file)

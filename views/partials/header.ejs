@@ -1,196 +1,85 @@
+
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <style>
-        #topbarsearch .input-field .prefix {
-            width: 0rem !important;
-        }
-
-        #topbarsearch nav ul li:hover,
-        nav ul li.active {
-            background-color: none !important;
-        }
-
-        .input-field .prefix~input,
-        .input-field .prefix~textarea,
-        .input-field .prefix~label,
-        .input-field .prefix~.validate~label,
-        .input-field .prefix~.autocomplete-content {
-            margin-left: 1rem !important;
-        }
-
-        .header-search-input {
-            display: block;
-            padding: 8px 8px 8px 72px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.3);
-            height: 24px;
-            font-size: 16px;
-            font-weight: 400;
-            outline: none;
-            border-radius: 3px;
-        }
-    </style>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Shop | E-Shopper</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/prettyPhoto.css" rel="stylesheet">
+    <link href="css/price-range.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
 </head>
 
 <body>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
-    <!-- Dropdown Structure -->
-    <ul id="dropdown1" class="dropdown-content">
-        <li><a href="#!">Your orders</a></li>
-        <li><a href="#!">Cart</a></li>
-        <li class="divider"></li>
-        <li><a href="#!">three</a></li>
-    </ul>
-    <nav class="">
-        <div class="nav-wrapper">
-            <a href="#" class="brand-logo red-text">Logo</a>
-            <ul class="hide-on-med-and-down left">
-                <li>
-                    <div class="center row">
-                        <div class="col s12">
-                            <div class="row" id="topbarsearch">
-                                <div class="input-field col s6 s12" style="padding-left:30%">
-                                    <i class="material-icons prefix">search</i>
-                                    <input type="text" style="width:200%; padding-left:14%" placeholder="search" id="autocomplete-input" class="autocomplete">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-            <ul class="hide-on-med-and-down right">
-                <% if(currentUser!= null){ %>
-                    <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hi <%= currentUser.email %> <i class="material-icons right">arrow_drop_down</i></a></li>
-                    <li><a href="/logout"> Logout </li>
-                    <% }else{ %>
-                        <li><a class="waves-effect waves-light modal-trigger" href="#loginModal">Login</a></li>
-                        <li><a class="waves-effect waves-light modal-trigger" href="#registerModal">Register</a></li>
-                        <% } %>
-            </ul>
-        </div>
-    </nav>
-
-    <script>
-        $(document).ready(function () {
-            $('input.autocomplete').autocomplete({
-                data: {
-                    "Apple": null,
-                    "Microsoft": null,
-                    "Google": null,
-                    "Gargle": null
-                }
-            });
-        });
-        $(document).ready(function () {
-            $(".dropdown-button").dropdown();
-
-            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-            $('#loginModal').modal();
-            $('#registerModal').modal();
-        });
-    </script>
-    <br>
-    <br>
-    <br>
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <h4 class="center">Login</h4>
-            <div class="row">
-                <form class="col s12" action="/login" method="POST">
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix" style="padding-top:1%">account_circle</i>
-                            <div style="padding-left:8%">
-                                <input id="email" type="text" class="validate" name="email">
-                                <label for="email" style="padding-left:10%">Email</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix" style="padding-top:1%">lock</i>
-                            <div style="padding-left:8%">
-                                <input name="password" id="password" type="password" class="validate">
-                                <label for="password" name="password" style="padding-left:10%">Password</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="center">
-                        <button class="btn waves-effect waves-light" name="action">
-                            Submit<i class="material-icons right">send</i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="center">
-                <button class="btn indigo darken-3"><i class="fa fa-facebook-official" aria-hidden="true"></i>&nbsp; Login with facebook</button>
-                <button class="btn red"><i class="fa fa-google" aria-hidden="true"></i>&nbsp; Login with google</button>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-        </div>
-    </div>
-    <!-- Register Modal -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <h4 class="center">Register</h4>
-            <div class="row">
-                <form class="col s12" action="/register" method="POST">
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input name="fname" id="last_name" type="text" class="validate">
-                            <label for="first_name">First Name</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input name="lname" id="last_name" type="text" class="validate">
-                            <label for="last_name">Last Name</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix" style="padding-top:1%">account_circle</i>
-                            <div style="padding-left:8%">
-                                <input id="email" type="text" class="validate" name="email">
-                                <label for="email" style="padding-left:10%">Email</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix" style="padding-top:1%">lock</i>
-                            <div style="padding-left:8%">
-                                <input name="password" id="password" type="password" class="validate">
-                                <label for="password" name="password" style="padding-left:10%">Password</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="center">
-                        <button class="btn waves-effect waves-light" name="action">
-                            Submit<i class="material-icons right">send</i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="center">
-                <button class="btn indigo darken-3"><i class="fa fa-facebook-official" aria-hidden="true"></i>&nbsp; Register with facebook</button>
-                <button class="btn red"><i class="fa fa-google" aria-hidden="true"></i>&nbsp; Register with google</button>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-        </div>
+	<header id="header"><!--header-->
+		<div class="header_top"><!--header_top-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 ">
+						<div class="contactinfo">
+							<ul class="nav nav-pills">
+								<li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
+								<li><a href=""><i class="fa fa-envelope"></i> info@domain.com</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="social-icons pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href=""><i class="fa fa-facebook"></i></a></li>
+								<li><a href=""><i class="fa fa-twitter"></i></a></li>
+								<li><a href=""><i class="fa fa-linkedin"></i></a></li>
+								<li><a href=""><i class="fa fa-dribbble"></i></a></li>
+								<li><a href=""><i class="fa fa-google-plus"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header_top-->
+		
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="/"><img src="images/home/logo.png" alt="" /></a>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+								<!-- <li><a href=""><i class="fa fa-user"></i> Account</a></li> -->
+								<!-- <li><a href=""><i class="fa fa-star"></i> Wishlist</a></li> -->
+								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+								<li><a href="/cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								<% if(currentUser!= null){ %>	
+									<li><a href=""><i class="fa fa-user"></i>Hi <%= currentUser.email %></a></li>									
+									<li><a href="/logout"><i class="fa fa-sign-out"></i> Logout </a> </li>
+									<% }else{ %>
+								<li><a href="/login"><i class="fa fa-lock"></i> Login/Register </a></li>
+								<!-- <li><a href="/logout"><i class="fa fa-lock"></i> Sign Up</a></li> -->
+									
+								<% } %>
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
     </div>
