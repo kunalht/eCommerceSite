@@ -1,0 +1,234 @@
+<!-- <!DOCTYPE html>
+<html>
+
+<head> -->
+    <!--Import Google Icon Font-->
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <!--Import materialize.css-->
+    <!-- <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <!--Let browser know website is optimized for mobile-->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+        #topbarsearch .input-field .prefix {
+            width: 0rem !important;
+        }
+
+        #topbarsearch nav ul li:hover,
+        nav ul li.active {
+            background-color: none !important;
+        }
+
+        .input-field .prefix~input,
+        .input-field .prefix~textarea,
+        .input-field .prefix~label,
+        .input-field .prefix~.validate~label,
+        .input-field .prefix~.autocomplete-content {
+            margin-left: 1rem !important;
+        }
+
+        .header-search-input {
+            display: block;
+            padding: 8px 8px 8px 72px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            height: 24px;
+            font-size: 16px;
+            font-weight: 400;
+            outline: none;
+            border-radius: 3px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script> -->
+    <!-- <ul id="dropdown1" class="dropdown-content">
+        <li><a href="#!">Your orders</a></li>
+        <li><a href="#!">Cart</a></li>
+        <li class="divider"></li>
+        <li><a href="#!">three</a></li>
+    </ul>
+    <nav class="">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo red-text">Logo</a>
+            <ul class="hide-on-med-and-down left">
+                <li>
+                    <div class="center row">
+                        <div class="col s12">
+                            <div class="row" id="topbarsearch">
+                                <div class="input-field col s6 s12" style="padding-left:30%">
+                                    <i class="material-icons prefix">search</i>
+                                    <input type="text" style="width:200%; padding-left:14%" placeholder="search" id="autocomplete-input" class="autocomplete">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="hide-on-med-and-down right">
+                <% if(currentUser!= null){ %>
+                    <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Hi <%= currentUser.email %> <i class="material-icons right">arrow_drop_down</i></a></li>
+                    <li><a href="/logout"> Logout </li>
+                    <% }else{ %>
+                        <li><a class="waves-effect waves-light modal-trigger" href="#loginModal">Login</a></li>
+                        <li><a class="waves-effect waves-light modal-trigger" href="#registerModal">Register</a></li>
+                        <% } %>
+            </ul>
+        </div>
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+            $('input.autocomplete').autocomplete({
+                data: {
+                    "Apple": null,
+                    "Microsoft": null,
+                    "Google": null,
+                    "Gargle": null
+                }
+            });
+        });
+        $(document).ready(function () {
+            $(".dropdown-button").dropdown();
+            $('#loginModal').modal();
+            $('#registerModal').modal();
+        });
+    </script>
+    <br>
+    <br>
+    <br> -->
+    <!-- Login Modal -->
+    <!-- <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h4 class="center">Login</h4>
+            <div class="row">
+                <form class="col s12" action="/login" method="POST">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix" style="padding-top:1%">account_circle</i>
+                            <div style="padding-left:8%">
+                                <input id="email" type="text" class="validate" name="email">
+                                <label for="email" style="padding-left:10%">Email</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix" style="padding-top:1%">lock</i>
+                            <div style="padding-left:8%">
+                                <input name="password" id="password" type="password" class="validate">
+                                <label for="password" name="password" style="padding-left:10%">Password</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="center">
+                        <button class="btn waves-effect waves-light" name="action">
+                            Submit<i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="center">
+                <button class="btn indigo darken-3"><i class="fa fa-facebook-official" aria-hidden="true"></i>&nbsp; Login with facebook</button>
+                <button class="btn red"><i class="fa fa-google" aria-hidden="true"></i>&nbsp; Login with google</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div> -->
+    <!-- Register Modal -->
+    <!-- <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <h4 class="center">Register</h4>
+            <div class="row">
+                <form class="col s12" action="/register" method="POST">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input name="fname" id="last_name" type="text" class="validate">
+                            <label for="first_name">First Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input name="lname" id="last_name" type="text" class="validate">
+                            <label for="last_name">Last Name</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix" style="padding-top:1%">account_circle</i>
+                            <div style="padding-left:8%">
+                                <input id="email" type="text" class="validate" name="email">
+                                <label for="email" style="padding-left:10%">Email</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix" style="padding-top:1%">lock</i>
+                            <div style="padding-left:8%">
+                                <input name="password" id="password" type="password" class="validate">
+                                <label for="password" name="password" style="padding-left:10%">Password</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="center">
+                        <button class="btn waves-effect waves-light" name="action">
+                            Submit<i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="center">
+                <button class="btn indigo darken-3"><i class="fa fa-facebook-official" aria-hidden="true"></i>&nbsp; Register with facebook</button>
+                <button class="btn red"><i class="fa fa-google" aria-hidden="true"></i>&nbsp; Register with google</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div> -->
+
+    <!-- <#% include ../partials/header.ejs %> -->
+
+<!-- 
+<div class="row"> 
+  <div class="col m3">
+    categories
+  </div>
+  <div class="col m9">
+    <% if( products.length>((page-1)*9+9)){ %>
+     <% max = ((page-1)*9+9) %>
+    <% }else{ %>
+     <% max = products.length %>
+   <% } %>
+    <% for(var i = (page-1)*9;i<max ;i++){ %>
+      <div class="col s6 m4">
+          <div class="card medium">
+            <div class="card-image">
+              <img src="<%= products[i].image %>">
+              <span class="card-title">Product 1</span>
+            </div>
+            <div class="card-content">
+              <h5 class="center"><%= products[i].name %> </h5>
+              <%= products[i].price %>
+            </div>
+            <div class="card-action">
+              <div class="row">
+                <div class="col m5">
+              <a href="/order/new/<%= products[i].id %>" style="font-size:95%">Buy now</a>
+                </div>
+             <div class="col m7">
+              <a href="/cart/<%= products[i].id %>" style="font-size:95%">Add to cart</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+  </div>
+</div>
+     -->

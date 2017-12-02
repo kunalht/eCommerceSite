@@ -7,4 +7,5 @@ const express = require("express"),
 router.get('/cart/:id', cartMiddleware.addToCart)
 router.get('/cart/d/:id',cartMiddleware.removeFromCart)
 router.get('/cart', cartMiddleware.cart)
+
 module.exports = router;

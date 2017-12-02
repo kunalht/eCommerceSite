@@ -4,9 +4,10 @@ const c = new client({
     host: 'localhost',
     user: 'root',
     password: 'kunal',
-    port: 3307,
+    port: 3306,
     db: 'ddif',
 })
+
 
 orderMiddleware.singleOrder = function (req, res) {
     //If query has item in link
@@ -72,6 +73,7 @@ orderMiddleware.orderPostSingle = function (req, res) {
 }
 
 orderMiddleware.newOrder = function (req, res) {
+
     var total = 0
     var curr_total = 0
     // get items from cart

@@ -6,7 +6,7 @@ const c = new client({
     host: 'localhost',
     user: 'root',
     password: 'kunal',
-    port: 3307,
+    port: 3306,
     db: 'ddif',
 })
 
@@ -30,10 +30,9 @@ cartMiddleware.addToCart = function (req, res) {
                                 if (err) {
                                     console.log(err)
                                 } else {
-                                    console.log(items)
+                                    // console.log(items)
                                 }
                             })
-                        console.log(item_value)
                     } else {
                         //else create new iteam at length+1 location
                         console.log(req.user.ID)
@@ -43,7 +42,7 @@ cartMiddleware.addToCart = function (req, res) {
                                 if (err) {
                                     console.log(err)
                                 } else {
-                                    console.log(rows)
+                                    // console.log(rows)
                                 }
                             })
                     }
@@ -64,6 +63,15 @@ cartMiddleware.cart = function (req, res) {
 }
 
 cartMiddleware.removeFromCart = function (req, res) {
+    c.query('delete from cart where user_id=:userid AND item_id=:itemid',
+    {userid:req.user.ID,itemid:req.params.id},function(err,itemRemoved){
+        if(err){
+            console.log(err)
+        }else{
+            res.redirect("/cart")
+        }
+    })
+    console.log(req.params.id)
 }
 c.end()
 
