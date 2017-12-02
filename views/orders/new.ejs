@@ -1,42 +1,33 @@
-<#% include ../partials/header.ejs %>
+<% include ../partials/header.ejs %>
 
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="css/font-awesome.min.css" rel="stylesheet">
-<link href="css/prettyPhoto.css" rel="stylesheet">
-<link href="css/price-range.css" rel="stylesheet">
-<link href="css/animate.css" rel="stylesheet">
-<link href="css/main.css" rel="stylesheet">
-<link href="css/responsive.css" rel="stylesheet">
 order
 Your order details are <br>
 
 
 
-<!-- <#% foundProduct.forEach(function(product){ %>
+<% foundProduct.forEach(function(product){ %>
 
-<#%= product.name %>
-<#%= product.price %>
+<%= product.name %>
+<%= product.price %>
 <br>
 
-<#% }) %>
+<% }) %>
 <br><br>
-Total amount : <#%= total %> <br>
+Total amount : <%= total %> <br>
     Your address & contact details:
-<br> -->
-<!-- Add a way to select address using button onClick and form hidden element -->
-<!-- send address id, item id and quantity through post request -->
-<!-- <#% foundAddress.forEach(function(add){ %>
-    <#%= add.address %>
+<br>
+<!-- Add a way to select address using button onClick and form hidden element
+send address id, item id and quantity through post request -->
+<% foundAddress.forEach(function(add){ %>
+    <%= add.address %>
     <br>
-<#% }) %> -->
+<% }) %>
 
 <br>
 <form action="/order" method="POST">
 <button>Place order
 </button>
 </form>
-
-
 <div class="shopper-informations">
         <div class="row">
             <div class="col-sm-3">

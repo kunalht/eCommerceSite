@@ -21,7 +21,7 @@ const c = new client({
     host: 'localhost',
     user: 'root',
     password: 'kunal',
-    port: 3307,
+    port: 3306,
     db: 'ddif',
 
 })

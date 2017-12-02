@@ -1,19 +1,19 @@
 const express = require("express"),
-      router = express.Router(),
-      orderMiddleware = require("../middleware/orders"),
-      middlewareObj = require("../middleware/index")
-      
-router.get('/order/new/:id',orderMiddleware.singleOrder)
-router.post('/order/:id',orderMiddleware.orderPostSingle)
-// router.get('/order/new/:id/add',orderMiddleware.singleOrderAddress)
-// router.get('/order/new',orderMiddleware.newOrder)
-router.get('/order/new',function(req, res){
-  res.render("orders/new.ejs")
-})
-router.post('/order',orderMiddleware.postOrder)
+  router = express.Router(),
+  middlewareObj = require("../middleware/index")
+  orderMiddleware = require("../middleware/orders"),
 
-  //If it's an admin account
-  // List of all orders.
-  // Add way to delete account
-  router.get('/orders',middlewareObj.checkisAdmin ,middlewareObj.orders)
+// router.use(express.static(__dirname + "/public"))
+
+
+router.get('/order/new/:id', orderMiddleware.singleOrder)
+router.post('/order/:id', orderMiddleware.orderPostSingle)
+// router.get('/order/new/:id/add',orderMiddleware.singleOrderAddress)
+router.get('/checkout',orderMiddleware.newOrder)
+router.post('/order', orderMiddleware.postOrder)
+
+//If it's an admin account
+// List of all orders.
+// Add way to delete account
+router.get('/orders', middlewareObj.checkisAdmin, middlewareObj.orders)
 module.exports = router;
