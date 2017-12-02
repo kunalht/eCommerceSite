@@ -13,17 +13,17 @@ const express = require("express"),
     FacebookStrategy = require("passport-facebook"),
     bcrypt = require("bcrypt-nodejs"),
     session = require("express-session"),
-    configAuth = require('./config/auth')
+    configAuth = require('./config/auth'),
+    mysqlAuth = require('./config/mysqlAuth')
 
 
 
 const c = new client({
-    host: 'localhost',
-    user: 'root',
-    password: 'kunal',
-    port: 3307,
-    db: 'ddif',
-
+    host: mysqlAuth.mysqlAuth.host,
+    user: mysqlAuth.mysqlAuth.user,
+    password: mysqlAuth.mysqlAuth.password,
+    port: mysqlAuth.mysqlAuth.port,
+    db: mysqlAuth.mysqlAuth.db
 })
 
 app.use(require("express-session")({
