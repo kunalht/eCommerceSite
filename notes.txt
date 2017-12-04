@@ -1,18 +1,28 @@
 Alter table
 alter table products add column name varchar(20) after name;
 
+CREATE TABLE user(ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+email VARCHAR(256),
+password VARCHAR(256),
+fullname VARCHAR(256),
+loginwith varchar(50), 
+nickname varchar(50),
+facebook_id VARCHAR(256));
 
 // DESC Name not allowed
 
-Create table items(ID INT AUTO_INCREMENT PRIMARY KEY,
-// name varchar(100),
-// image varchar(150),
-// price double(10,2),
-// description varchar(200),
-// longDesc varchar(600) )'
+Create table products(ID INT AUTO_INCREMENT PRIMARY KEY,
+ name varchar(100),
+image varchar(150),
+price double(10,2),
+description varchar(200),
+longDesc varchar(600),
+createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+isDeleted boolean DEFAULT FALSE
+ )ENGINE=InnoDB;
 
 create table user_addr(
-    ID INT NOT NULL PRIMARY KEY,
+    ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fname varchar(30),
     lname varchar(30),
     address varchar(255),
@@ -22,23 +32,25 @@ create table user_addr(
     country varchar(40),
     phone varchar(20),
     user_id INT NOT NULL,
-foreign key (user_id) references user(id)
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+foreign key (user_id) references user(ID)
 ON DELETE CASCADE
 )ENGINE = InnoDB;
 
 
 Query for join
 select * from user_addr join user ON user_addr.user_id = user.ID;
-
+    
 select * from cart join products ON cart.item_id = products.id 
 
 cart table:
-create table cart(user_id INT NOT NULL,
+create table cart( ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+user_id INT NOT NULL,
 item_id INT NOT NULL,
 quantity INT DEFAULT 1,
 foreign key (user_id) references user(id),
 foreign key (item_id) references products(id)
-) ENGINE = InnoDB
+)ENGINE = InnoDB;
 
 Copy from one db to other
 (copy from cartDB to orderDB)
@@ -57,22 +69,26 @@ select sum(quantity) from cart where user_id = 3;
 INSERT INTO copy SELECT * FROM original;
 
 ORDER table:
-create table orders(order_id INT AUTO_INCREMENT PRIMARY KEY,
+create table orders(ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 addr_id INT NOT NULL,
 user_id INT NOT NULL,
-orderDate  DATETIME DEFAULT NOW(),
+createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 amount double,
-foreign key (addr_id) references user_addr(id),
+foreign key (addr_id) references user_addr(ID),
 foreign key (user_id) references user(ID)
-)
+)ENGINE=InnoDB;
 
 order_item TABLE:
-create table order_item(order_id INT NOT NULL,
+
+
+create table order_items(ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+order_id INT NOT NULL,
 item_id INT NOT NULL,
 quantity INT,
-foreign key (order_id) references orders(order_id),
-foreign key (item_id) references products(id)
-)
+itemPrice double(10,2),
+foreign key (order_id) references orders(ID),
+foreign key (item_id) references products(ID)
+)ENGINE=InnoDB;
 
 
 create table user_fb(

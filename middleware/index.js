@@ -1,16 +1,18 @@
 const passport = require("passport"),
     client = require('mariasql'),
-    bcrypt = require("bcrypt-nodejs")
+    bcrypt = require("bcrypt-nodejs"),
+    mysqlAuth = require('../config/mysqlAuth')
+    
 
 
 const middlewareObj = {};
 
 const c = new client({
-    host: 'localhost',
-    user: 'root',
-    password: 'kunal',
-    port: 3306,
-    db: 'ddif'
+    host: mysqlAuth.mysqlAuth.host,
+    user: mysqlAuth.mysqlAuth.user,
+    password: mysqlAuth.mysqlAuth.password,
+    port: mysqlAuth.mysqlAuth.port,
+    db: mysqlAuth.mysqlAuth.db
 })
 
 middlewareObj.getLogin = function (req, res) {
@@ -37,13 +39,14 @@ middlewareObj.homePage = function (req, res) {
 
 middlewareObj.checkisAdmin = function (req, res, next) {
     if (req.user) {
-        if (req.user.acc_type == "admin") {
-            console.log("ADMIN")
-            next()
-        } else {
-            console.log("ERROR! You're not admin")
-            res.redirect("back")
-        }
+        next()
+        // if (req.user.acc_type == "admin") {
+        //     console.log("ADMIN")
+        //     next()
+        // } else {
+        //     console.log("ERROR! You're not admin")
+        //     res.redirect("back")
+        // }
     } else {
         console.log("no admin")
         res.redirect("back")

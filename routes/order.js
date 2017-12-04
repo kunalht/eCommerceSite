@@ -7,10 +7,10 @@ const express = require("express"),
 
 
 router.get('/order/new/:id', orderMiddleware.singleOrder)
+router.post('/order', orderMiddleware.postOrder)
 router.post('/order/:id', orderMiddleware.orderPostSingle)
 // router.get('/order/new/:id/add',orderMiddleware.singleOrderAddress)
 router.get('/checkout',orderMiddleware.newOrder)
-router.post('/order', orderMiddleware.postOrder)
 
 //If it's an admin account
 // List of all orders.

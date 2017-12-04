@@ -125,8 +125,8 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'displayName', 'name', 'email']
 }, function (accessToken, refreshToken, profile, cb) {
     process.nextTick(function () {
-        // c.query('select * from user where id=15', function (err, user) {
-        c.query('select * from user_fb where pid=:pid', { pid: profile.id }, function (err, user) {
+        c.query('select * from user where facebook_id=:pid', { pid: profile.id }, function (err, user) {            
+        // c.query('select * from user_fb where pid=:pid', { pid: profile.id }, function (err, user) {
 
             if (err) {
                 return cb(err)
@@ -135,22 +135,26 @@ passport.use(new FacebookStrategy({
                 // user[0].test = "aa"
                 return cb(null, user[0])
             } else {
+                console.log(profile)
                 console.log(user.length)
                 var newUser = {}
                 newUser.pid = profile.id
                 newUser.token = accessToken
                 newUser.name = profile.name.givenName + ' ' + profile.name.familyName
                 newUser.email = (profile.emails[0].value || '').toLowerCase()
-                c.query('insert into user(email,fname,lname,oauth_id,loginwith) values(:email,:fname,:lname,:oauth_id,:loginwith)',
-                    { email: newUser.email, fname: profile.name.givenName, lname: profile.name.familyName, oauth_id: newUser.id, loginwith: "facebook" },
+                c.query('insert into user(email,fullname,facebook_id,loginwith) values(:email,:fullname,:pid,:loginwith)',
+                    { email: newUser.email, fullname: newUser.name, pid: newUser.pid, loginwith: "facebook" },
                     function (err, addedUser) {
-                        newUser.id = addedUser.info.insertId
-                        c.query('insert into user_fb(pid,id,email,name,token) values(:pid,:id,:email,:name,:token)',
-                            { pid: newUser.pid, id:addedUser.info.insertId,email: newUser.email, name: newUser.name, token: newUser.token },
-                            function (err, rows) {
-                                // req.login(newUser, function (err) {
-                                return cb(null, newUser)
-                            })
+                        if(err){
+                            console.log(err)
+                        }else{
+                            return cb(null, newUser)
+                        }
+                        // newUser.id = addedUser.info.insertId
+                        // c.query('insert into user_fb(pid,id,email,name,token) values(:pid,:id,:email,:name,:token)',
+                        //     { pid: newUser.pid, id:addedUser.info.insertId,email: newUser.email, name: newUser.name, token: newUser.token },
+                        //     function (err, rows) {
+                        //     })
                     })
                 // })
             }

@@ -1,103 +1,88 @@
 <% include ../partials/header.ejs %>
 
-order
-Your order details are <br>
-
-
-
-<% foundProduct.forEach(function(product){ %>
-
-<%= product.name %>
-<%= product.price %>
-<br>
-
-<% }) %>
-<br><br>
-Total amount : <%= total %> <br>
-    Your address & contact details:
-<br>
-<!-- Add a way to select address using button onClick and form hidden element
+    <!-- Add a way to select address using button onClick and form hidden element
 send address id, item id and quantity through post request -->
-<% foundAddress.forEach(function(add){ %>
-    <%= add.address %>
-    <br>
-<% }) %>
 
-<br>
-<form action="/order" method="POST">
-<button>Place order
-</button>
-</form>
-<div class="shopper-informations">
+
+    <!-- <br>
+    <form action="/order" method="POST">
+        <button>Place order
+        </button>
+    </form> -->
+
+    <div class="container">
         <div class="row">
-            <div class="col-sm-3">
-                <div class="shopper-info">
-                    <p>Shopper Information</p>
-                    <form>
-                        <input type="text" placeholder="Display Name">
-                        <input type="text" placeholder="User Name">
-                        <input type="password" placeholder="Password">
-                        <input type="password" placeholder="Confirm password">
-                    </form>
-                    <a class="btn btn-primary" href="">Get Quotes</a>
-                    <a class="btn btn-primary" href="">Continue</a>
+            <div class="col-md-8">
+                <div class="row">
+                    <% foundAddress.forEach(function(add){ %>
+                        <br>
+                        <div class="col-md-6">
+                            <div class="product-image-wrapper">
+                                <div class="single-products">
+                                    <div class="productinfo text-center">
+                                        <img src="" height="268" width="249" alt="" />
+                                        <h2>
+                                            <%= add.fname %>
+                                                <%= add.lname %>
+                                        </h2>
+                                        <p> add.address </p>
+                                        <p> add.city </p>
+                                        <p> add.state </p>
+                                        <p> add.zip </p>
+                                        <p> add.phone </p>
+                                        <form action="/order/?address=<%= add.ID %>" method="POST">
+                                                <!-- <i class="fa fa-shopping-cart"></i> -->
+                                                <input type="submit" class="btn btn-default add-to-cart" value = " Checkout at this address" name="add">                                        </form>
+                                    </div>
+                                </div>
+                                <!-- <div class="choose">
+                                <ul class="nav nav-pills nav-justified">
+                                  <li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+                                  <li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
+                                </ul>
+                              </div> -->
+                            </div>
+                        </div>
+                        <% }) %>
+
                 </div>
+
             </div>
-            <div class="col-sm-5 clearfix">
+
+            <div class="col-md-4 clearfix">
                 <div class="bill-to">
-                    <p>Bill To</p>
-                    <div class="form-one">
-                        <form>
-                            <input type="text" placeholder="Company Name">
-                            <input type="text" placeholder="Email*">
-                            <input type="text" placeholder="Title">
-                            <input type="text" placeholder="First Name *">
-                            <input type="text" placeholder="Middle Name">
-                            <input type="text" placeholder="Last Name *">
-                            <input type="text" placeholder="Address 1 *">
-                            <input type="text" placeholder="Address 2">
-                        </form>
-                    </div>
-                    <div class="form-two">
-                        <form>
-                            <input type="text" placeholder="Zip / Postal Code *">
-                            <select>
-                                <option>-- Country --</option>
-                                <option>United States</option>
-                                <option>Bangladesh</option>
-                                <option>UK</option>
-                                <option>India</option>
-                                <option>Pakistan</option>
-                                <option>Ucrane</option>
-                                <option>Canada</option>
-                                <option>Dubai</option>
-                            </select>
-                            <select>
-                                <option>-- State / Province / Region --</option>
-                                <option>United States</option>
-                                <option>Bangladesh</option>
-                                <option>UK</option>
-                                <option>India</option>
-                                <option>Pakistan</option>
-                                <option>Ucrane</option>
-                                <option>Canada</option>
-                                <option>Dubai</option>
-                            </select>
-                            <input type="password" placeholder="Confirm password">
-                            <input type="text" placeholder="Phone *">
+                    <p>Enter new address</p>
+                    <div class="login-form">
+                        <form action="/order" method="POST">
+                            <input type="text" name="fname" placeholder="First Name *">
+                            <input type="text" name="lname" placeholder="Last Name *">
+                            <input type="text" name="address" placeholder="Address *">
+                            <input type="text" name="city" placeholder="Email*">
+                            <input type="text" name="zip" placeholder="Zip / Postal Code *">
+                            <input type="text" name="phone" placeholder="Phone *">
                             <input type="text" placeholder="Mobile Phone">
-                            <input type="text" placeholder="Fax">
+
+                            <select name="country">
+                                <option>-- State / Province / Region --</option>
+                                <option value="us" >United States</option>
+                                <option>Bangladesh</option>
+                                <option>UK</option>
+                                <option>India</option>
+                                <option>Pakistan</option>
+                                <option>Ucrane</option>
+                                <option>Canada</option>
+                                <option>Dubai</option>
+                            </select>
+                            <br>   
+                            <br>
+                            <br>
+                            <br>
+                            
+                            <input type="submit" class="btn btn-default add-to-cart" value = " Checkout at this address">                                        </form>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
-                <div class="order-message">
-                    <p>Shipping Order</p>
-                    <textarea name="message"  placeholder="Notes about your order, Special Notes for Delivery" rows="16"></textarea>
-                    <label><input type="checkbox"> Shipping to bill address</label>
-                </div>	
-            </div>					
         </div>
     </div>
     <% include ../partials/footer.ejs %>

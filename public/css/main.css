@@ -347,6 +347,9 @@ ul.sub-menu {
 
 #footer {
   background: #F0F0E9;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 

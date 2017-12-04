@@ -1,11 +1,13 @@
-const client = require('mariasql')
+const client = require('mariasql'),
+mysqlAuth = require('../config/mysqlAuth')
+
 const orderMiddleware = {}
 const c = new client({
-    host: 'localhost',
-    user: 'root',
-    password: 'kunal',
-    port: 3306,
-    db: 'ddif',
+    host: mysqlAuth.mysqlAuth.host,
+    user: mysqlAuth.mysqlAuth.user,
+    password: mysqlAuth.mysqlAuth.password,
+    port: mysqlAuth.mysqlAuth.port,
+    db: mysqlAuth.mysqlAuth.db
 })
 
 
@@ -90,7 +92,7 @@ orderMiddleware.newOrder = function (req, res) {
                 })
                 //address find
                 c.query('select * from user_addr where user_id=:id',
-                    { id: req.user.ID },
+                    { id: 1 },
                     function (err, foundAddress) {
                         if (err) {
                             console.log(err)
@@ -122,33 +124,83 @@ orderMiddleware.postOrder = function (req, res) {
                 foundProduct.forEach(function (item) {
                     curr_total = item.price * item.quantity
                     total += curr_total
+                    console.log("FIRST")
                 })
-                // insert into order 
-                c.query('insert into orders(addr_id,user_id,amount) values (:addr_id,:user_id,:amount)',
-                    { addr_id: 2, user_id: req.user.ID, amount: total }, function (err, newOrder) {
-                        if (err) {
+                // If address id is provided in query add address ID
+                // Else create new address 
+                if(req.query){
+                    console.log("SECOND")
+                    addr_id = req.query.address
+                    c.query('insert into orders(addr_id,user_id,amount) values (:addr_id,:user_id,:amount)',
+                        { addr_id: addr_id, user_id: req.user.ID, amount: total }, function (err, newOrder) {
+                            if (err) {
+                                console.log(err)
+                            } else {
+                                // order_id = newOrder.info.insertId
+                                // copy items to order_item
+                                let order_id 
+                                c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,item_id,quantity from cart where user_id= :user_id select price from products',
+                                    { order_id: newOrder.info.insertId, user_id: req.user.ID }, function (err, addeditems) {
+                                        if (err) {
+                                            console.log(err)
+                                        } else {
+                                            c.query('delete from cart where user_id=:userid',
+                                                { userid: req.user.ID }, function (err, clearedCart) {
+                                                    if (err) {
+                                                        console.log(err)
+                                                    } else {
+                                                        res.send("done")
+                                                        // clearcart
+                                                    }
+                                                })
+                                        }
+                                    })
+                            }
+                        })
+                }else{
+                    console.log("here")
+                    let fname = req.body.fname
+                    let lname = req.body.lname
+                    let address = req.body.address
+                    let city = req.body.city
+                    let zip = req.body.zip
+                    let phone = req.body.phone
+                    let userId = req.user.ID
+                    c.query('INSERT INTO user_addr(fname,lname,address,city,zip,phone,user_id) VALUES(:fname,:lname,:address,:city,:zip,:phone,:userId)',
+                    {fname:fname,lname:lname,address:address,city:city,zip:zip,phone:phone,userId:userId},(err,newAddress)=>{
+                        if(err){
                             console.log(err)
-                        } else {
-                            // order_id = newOrder.info.insertId
-                            // copy items to order_item
-                            c.query('insert into order_item(order_id,item_id,quantity) select :order_id,item_id,quantity from cart where user_id= :user_id',
-                                { order_id: newOrder.info.insertId, user_id: req.user.ID }, function (err, addeditems) {
-                                    if (err) {
-                                        console.log(err)
-                                    } else {
-                                        c.query('delete from cart where user_id=:userid',
-                                            { userid: req.user.ID }, function (err, clearedCart) {
-                                                if (err) {
-                                                    console.log(err)
-                                                } else {
-                                                    res.send("done")
-                                                    // clearcart
-                                                }
-                                            })
-                                    }
-                                })
                         }
+                        console.log(newAddress)
+                        let addr_id = newAddress.info.insertId
+                        c.query('insert into orders(addr_id,user_id,amount) values (:addr_id,:user_id,:amount)',
+                            { addr_id: addr_id, user_id: userId, amount: total }, function (err, newOrder) {
+                                if (err) {
+                                    console.log(err)
+                                } else {
+                                    // order_id = newOrder.info.insertId
+                                    // copy items to order_item
+                                    c.query('insert into order_items(order_id,item_id,quantity) select :order_id,item_id,quantity from cart where user_id= :user_id',
+                                        { order_id: newOrder.info.insertId, user_id:userId }, function (err, addeditems) {
+                                            if (err) {
+                                                console.log(err)
+                                            } else {
+                                                c.query('delete from cart where user_id=:userid',
+                                                    { userid: req.user.ID }, function (err, clearedCart) {
+                                                        if (err) {
+                                                            console.log(err)
+                                                        } else {
+                                                            res.send("done")
+                                                            // clearcart
+                                                        }
+                                                    })
+                                            }
+                                        })
+                                }
+                            })
+
                     })
+                }
             }
         })
 }
