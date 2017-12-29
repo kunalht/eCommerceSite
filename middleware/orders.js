@@ -128,7 +128,8 @@ orderMiddleware.postOrder = function (req, res) {
                 })
                 // If address id is provided in query add address ID
                 // Else create new address 
-                if(req.query){
+                console.log(req.query)
+                if(req.query.addr_id){
                     console.log("SECOND")
                     addr_id = req.query.address
                     c.query('insert into orders(addr_id,user_id,amount) values (:addr_id,:user_id,:amount)',
