@@ -140,7 +140,7 @@ orderMiddleware.postOrder = function (req, res) {
                                 // order_id = newOrder.info.insertId
                                 // copy items to order_item
                                 let order_id 
-                                c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,item_id,quantity from cart where user_id= :user_id select price from products',
+                                c.query('insert into order_item(order_id,item_id,quantity,itemPrice) select :order_id,item_id,quantity from cart where user_id= :user_id select price from products',
                                     { order_id: newOrder.info.insertId, user_id: req.user.ID }, function (err, addeditems) {
                                         if (err) {
                                             console.log(err)
@@ -181,7 +181,7 @@ orderMiddleware.postOrder = function (req, res) {
                                 } else {
                                     // order_id = newOrder.info.insertId
                                     // copy items to order_item
-                                    c.query('insert into order_items(order_id,item_id,quantity) select :order_id,item_id,quantity from cart where user_id= :user_id',
+                                    c.query('insert into order_item(order_id,item_id,quantity) select :order_id,item_id,quantity from cart where user_id= :user_id',
                                         { order_id: newOrder.info.insertId, user_id:userId }, function (err, addeditems) {
                                             if (err) {
                                                 console.log(err)
@@ -199,7 +199,6 @@ orderMiddleware.postOrder = function (req, res) {
                                         })
                                 }
                             })
-
                     })
                 }
             }
