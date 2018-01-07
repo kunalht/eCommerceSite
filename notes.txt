@@ -32,7 +32,6 @@ create table user_addr(
     country varchar(40),
     phone varchar(20),
     user_id INT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 foreign key (user_id) references user(ID)
 ON DELETE CASCADE
 )ENGINE = InnoDB;

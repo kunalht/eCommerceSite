@@ -25,11 +25,11 @@ send address id, item id and quantity through post request -->
                                             <%= add.fname %>
                                                 <%= add.lname %>
                                         </h2>
-                                        <p> add.address </p>
-                                        <p> add.city </p>
-                                        <p> add.state </p>
-                                        <p> add.zip </p>
-                                        <p> add.phone </p>
+                                        <p> <%= add.address %> </p>
+                                        <p> <%= add.city %> </p>
+                                        <p> <%= add.state %> </p>
+                                        <p> <%= add.zip %> </p>
+                                        <p> <%= add.phone %> </p>
                                         <form action="/order/?address=<%= add.ID %>" method="POST">
                                                 <!-- <i class="fa fa-shopping-cart"></i> -->
                                                 <input type="submit" class="btn btn-default add-to-cart" value = " Checkout at this address" name="add">                                        </form>

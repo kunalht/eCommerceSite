@@ -114,8 +114,10 @@ orderMiddleware.postOrder = function (req, res) {
     var total = 0
     var curr_total = 0
     // get items from cart
+    let userId = req.user.ID
+    
     c.query('select * from cart join products ON cart.item_id=products.id where user_id=:userId',
-        { userId: req.user.ID }, function (err, foundProduct) {
+        { userId: userId }, function (err, foundProduct) {
             if (err) {
                 console.log(err)
             } else {
@@ -128,33 +130,45 @@ orderMiddleware.postOrder = function (req, res) {
                 })
                 // If address id is provided in query add address ID
                 // Else create new address 
-                if(req.query){
+                if(req.query.address){
+                    console.log(req.query)
                     console.log("SECOND")
-                    addr_id = req.query.address
+                    let addr_id = req.query.address
                     c.query('insert into orders(addr_id,user_id,amount) values (:addr_id,:user_id,:amount)',
                         { addr_id: addr_id, user_id: req.user.ID, amount: total }, function (err, newOrder) {
                             if (err) {
                                 console.log(err)
                             } else {
-                                // order_id = newOrder.info.insertId
                                 // copy items to order_item
-                                let order_id 
-                                c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,item_id,quantity from cart where user_id= :user_id select price from products',
-                                    { order_id: newOrder.info.insertId, user_id: req.user.ID }, function (err, addeditems) {
-                                        if (err) {
-                                            console.log(err)
-                                        } else {
-                                            c.query('delete from cart where user_id=:userid',
-                                                { userid: req.user.ID }, function (err, clearedCart) {
-                                                    if (err) {
-                                                        console.log(err)
-                                                    } else {
-                                                        res.send("done")
-                                                        // clearcart
-                                                    }
-                                                })
-                                        }
-                                    })
+                                let order_id = newOrder.info.insertId
+                                c.query('SELECT * FROM cart where user_id = :userId',{userId:userId},(err,cartItems)=>{
+                                    if(err){
+                                        console.log(err)
+                                    }else{
+                                        cartItems.forEach((item)=>{
+                                            c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,:itemId,:quantity,price from products where '+
+                                            'ID = :itemId',{order_id:order_id,itemId:parseInt(item.item_id),quantity:item.quantity},(err,addedItem)=>{
+                                                if(err){
+                                                    console.log(err)
+                                                }else{
+                                                    console.log(addedItem)
+                                                }
+                                            })
+                                        })
+                                        console.log(cartItems)
+                                        console.log("finished")
+                                        c.query('delete from cart where user_id=:userid',
+                                        { userid: userId }, function (err, clearedCart) {
+                                            if (err) {
+                                                console.log(err)
+                                            } else {
+                                                console.log(clearedCart)
+                                                res.send("done")
+                                                // clearcart
+                                            }
+                                        })
+                                    }
+                                })
                             }
                         })
                 }else{
@@ -165,7 +179,6 @@ orderMiddleware.postOrder = function (req, res) {
                     let city = req.body.city
                     let zip = req.body.zip
                     let phone = req.body.phone
-                    let userId = req.user.ID
                     c.query('INSERT INTO user_addr(fname,lname,address,city,zip,phone,user_id) VALUES(:fname,:lname,:address,:city,:zip,:phone,:userId)',
                     {fname:fname,lname:lname,address:address,city:city,zip:zip,phone:phone,userId:userId},(err,newAddress)=>{
                         if(err){
@@ -178,24 +191,37 @@ orderMiddleware.postOrder = function (req, res) {
                                 if (err) {
                                     console.log(err)
                                 } else {
-                                    // order_id = newOrder.info.insertId
-                                    // copy items to order_item
-                                    c.query('insert into order_items(order_id,item_id,quantity) select :order_id,item_id,quantity from cart where user_id= :user_id',
-                                        { order_id: newOrder.info.insertId, user_id:userId }, function (err, addeditems) {
-                                            if (err) {
-                                                console.log(err)
-                                            } else {
-                                                c.query('delete from cart where user_id=:userid',
-                                                    { userid: req.user.ID }, function (err, clearedCart) {
-                                                        if (err) {
-                                                            console.log(err)
-                                                        } else {
-                                                            res.send("done")
-                                                            // clearcart
-                                                        }
-                                                    })
-                                            }
-                                        })
+                                    let order_id = newOrder.info.insertId
+
+                                    c.query('SELECT * FROM cart where user_id = :userId',{userId:userId},(err,cartItems)=>{
+                                        if(err){
+                                            console.log(err)
+                                        }else{
+                                            cartItems.forEach((item)=>{
+                                                // c.query('insert into order_item(order_id,item_id,quantity,itemPrice) select :order_id,:itemId,:quantity,price from products where'+
+                                                // 'ID = :itemId',{order_id:order_id,itemId:item.item_id,quantity:item.quantity},(err,addedItem)=>{
+                                                c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,:itemId,:quantity,price from products where '+
+                                                'ID = :itemId',{order_id:order_id,itemId:parseInt(item.item_id),quantity:item.quantity},(err,addedItem)=>{
+                                                    if(err){
+                                                        console.log(err)
+                                                    }else{
+                                                        console.log(addedItem)
+                                                    }
+                                                })
+                                            })
+                                            console.log(cartItems)
+                                            console.log("finished")
+                                            c.query('delete from cart where user_id=:userid',
+                                            { userid: userId }, function (err, clearedCart) {
+                                                if (err) {
+                                                    console.log(err)
+                                                } else {
+                                                    console.log(clearedCart)
+                                                    res.send("done")
+                                                }
+                                            })
+                                        }
+                                    })
                                 }
                             })
 

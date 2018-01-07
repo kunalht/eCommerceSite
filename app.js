@@ -164,7 +164,8 @@ passport.use(new FacebookStrategy({
 const indexRoutes = require("./routes/index"),
     productRoutes = require("./routes/products"),
     cartRoutes = require("./routes/cart"),
-    orderRoutes = require("./routes/order")
+    orderRoutes = require("./routes/order"),
+    adminRoutes = require("./routes/adminRoutes")
 
 c.end()
 
@@ -173,6 +174,7 @@ app.use(indexRoutes)
 app.use(productRoutes)
 app.use(cartRoutes)
 app.use(orderRoutes)
+app.use(adminRoutes)
 
 
 

@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<h1> All orders </h1>
+<body>
+
+<h2> Customer Details </h2>
+First Name : <%= order[0].fname %>
+<br>
+Last Name : <%= order[0].lname %>
+<br>
+E mail : <%= order[0].email %>
+<br>
+<table>
+        <tr>
+            <th> Name </th>
+            <th> Address </th>
+            <th> City </th>
+            <th> State </th>
+            <th> zip </th>
+            <th> country </th>
+            <th> Phone </th>
+            
+            
+        </tr>
+            <tr>
+                <td> <%= order[0].fname + " " +order[0].lname %> </td>
+                    <td> <%= order[0].address %> </td>
+                    <td>  <%= order[0].city %> </td>
+                    <td>  <%= order[0].state %> </td>
+                    <td>  <%= order[0].zip %> </td>
+                    <td>  <%= order[0].country %> </td>
+                    <td>  <%= order[0].phone %> </td>
+                    
+                </tr>
+    </table>
+    <br>
+    <br>
+
+    <h2>
+        Order items
+    </h2>
+
+    <table>
+        <tr>
+            <th> Product ID </th>
+            <th> Name </th>
+            <th> Price </th>
+            <th> Quantity </th>
+        </tr>
+        <% items.forEach((item)=>{ %>
+            <tr>
+                <td> <%= item.ID %> </td>
+                    <td> <%= item.name %></td>
+                    <td>  <%= item.price %> </td>
+                    <td>  <%= item.quantity %> </td>
+                    
+                </tr>
+                <% }) %>
+    </table>
+
+</body>
+
+</html>

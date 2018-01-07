@@ -15,5 +15,4 @@ router.get('/checkout',orderMiddleware.newOrder)
 //If it's an admin account
 // List of all orders.
 // Add way to delete account
-router.get('/orders', middlewareObj.checkisAdmin, middlewareObj.orders)
 module.exports = router;

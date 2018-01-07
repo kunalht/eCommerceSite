@@ -1,29 +1,53 @@
-<!-- <% for(var i =0;i<orders.length; i++){ %>
-    <% if(i != 0){ %>
-    <% if(orders[i-1].order_id == orders[i].order_id){ %>
-        <%= orders[i].order_id %>
-        Same order
-        <% }else{ %>
-            New Order
-            <br>
-            <% } %>
-            <% } %>
-            <br>
-<% } %> -->
-aaa
-<!-- <#% for(var j=0;j<5;j++){ %>
-    <#%= j  %>
-    <#% j++ %>
-    <#% } %>
+<!DOCTYPE html>
 
-<#% for(var i=1;i<orders.length;i++){ %>
-   <#% if(i!=1){ %>
-    <#% while(orders[i].order_id == orders[i-1].order_id){ %>
-        <#% i++ %>
-    <#% } %>
-    <#% { %>
-        new order
-        <br>
-    <#% } %>
-    <#% } %>    
-<#% } %> -->
+
+<html>
+
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<h1> All orders </h1>
+<body>
+
+    <table>
+        <tr>
+            <th>Order ID </th>
+            <th> Amount </th>
+            <th> User email </th>
+            <th> User's name </th>
+            <th> Ordered On  </th>
+            
+        </tr>
+        <% orders.forEach((order)=>{ %>
+            <tr>
+                <td>   <%= order.ID %> </td>
+                    <td> <%= order.amount %></td>
+                    <td>  <%= order.email %> </td>
+                    <td>  <%= order.nickname %> </td>
+                    <td>  <%= order.createdAt %> </td>
+                    
+                </tr>
+                <% }) %>
+    </table>
+
+</body>
+
+</html>

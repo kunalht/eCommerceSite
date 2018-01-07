@@ -65,15 +65,5 @@ middlewareObj.loginfb = function (req, res) {
     }
 }
 
-middlewareObj.orders = function (req, res){
-    c.query("select * from orders join order_item ON orders.order_id = order_item.order_id", function(err, foundOrder){
-        if(err){
-            console.log(err)
-        }else{
-            res.render('orders/index',{orders:foundOrder})
-            // console.log(items)
-        }
-    })
-}
 c.end()
 module.exports = middlewareObj
