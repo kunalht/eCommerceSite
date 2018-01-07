@@ -130,8 +130,13 @@ orderMiddleware.postOrder = function (req, res) {
                 })
                 // If address id is provided in query add address ID
                 // Else create new address 
+<<<<<<< HEAD
                 if(req.query.address){
                     console.log(req.query)
+=======
+                console.log(req.query)
+                if(req.query.addr_id){
+>>>>>>> 48995db8dcb380d5899462fc8f23ae20b809548e
                     console.log("SECOND")
                     let addr_id = req.query.address
                     c.query('insert into orders(addr_id,user_id,amount) values (:addr_id,:user_id,:amount)',
@@ -140,6 +145,7 @@ orderMiddleware.postOrder = function (req, res) {
                                 console.log(err)
                             } else {
                                 // copy items to order_item
+<<<<<<< HEAD
                                 let order_id = newOrder.info.insertId
                                 c.query('SELECT * FROM cart where user_id = :userId',{userId:userId},(err,cartItems)=>{
                                     if(err){
@@ -169,6 +175,25 @@ orderMiddleware.postOrder = function (req, res) {
                                         })
                                     }
                                 })
+=======
+                                let order_id 
+                                c.query('insert into order_item(order_id,item_id,quantity,itemPrice) select :order_id,item_id,quantity from cart where user_id= :user_id select price from products',
+                                    { order_id: newOrder.info.insertId, user_id: req.user.ID }, function (err, addeditems) {
+                                        if (err) {
+                                            console.log(err)
+                                        } else {
+                                            c.query('delete from cart where user_id=:userid',
+                                                { userid: req.user.ID }, function (err, clearedCart) {
+                                                    if (err) {
+                                                        console.log(err)
+                                                    } else {
+                                                        res.send("done")
+                                                        // clearcart
+                                                    }
+                                                })
+                                        }
+                                    })
+>>>>>>> 48995db8dcb380d5899462fc8f23ae20b809548e
                             }
                         })
                 }else{
@@ -191,6 +216,7 @@ orderMiddleware.postOrder = function (req, res) {
                                 if (err) {
                                     console.log(err)
                                 } else {
+<<<<<<< HEAD
                                     let order_id = newOrder.info.insertId
 
                                     c.query('SELECT * FROM cart where user_id = :userId',{userId:userId},(err,cartItems)=>{
@@ -222,9 +248,28 @@ orderMiddleware.postOrder = function (req, res) {
                                             })
                                         }
                                     })
+=======
+                                    // order_id = newOrder.info.insertId
+                                    // copy items to order_item
+                                    c.query('insert into order_item(order_id,item_id,quantity) select :order_id,item_id,quantity from cart where user_id= :user_id',
+                                        { order_id: newOrder.info.insertId, user_id:userId }, function (err, addeditems) {
+                                            if (err) {
+                                                console.log(err)
+                                            } else {
+                                                c.query('delete from cart where user_id=:userid',
+                                                    { userid: req.user.ID }, function (err, clearedCart) {
+                                                        if (err) {
+                                                            console.log(err)
+                                                        } else {
+                                                            res.send("done")
+                                                            // clearcart
+                                                        }
+                                                    })
+                                            }
+                                        })
+>>>>>>> 48995db8dcb380d5899462fc8f23ae20b809548e
                                 }
                             })
-
                     })
                 }
             }
