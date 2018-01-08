@@ -1,8 +1,8 @@
 <% include ../partials/header.ejs %>
 
-    <!--/header-middle-->
-	
-		<!-- <div class="header-bottom">
+	<!--/header-middle-->
+
+	<!-- <div class="header-bottom">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-9">
@@ -46,20 +46,46 @@
 				</div>
 			</div> -->
 	</header>
-	
+
 	<section id="advertisement">
 		<div class="container">
 			<img src="images/shop/advertisement.jpg" alt="" />
 		</div>
 	</section>
-	
+
+	<!-- Default dropright button -->
+	<div class="btn-group dropright">
+		<button type="button" class="btn btn-secondary">Dropright</button>
+		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="sr-only">Toggle Dropright</span>
+		</button>
+		<div class="dropdown-menu">
+			<!-- Dropdown menu links -->
+		</div>
+	</div>
+
+	<!-- Split dropright button -->
+	<div class="btn-group dropright">
+		<button type="button" class="btn btn-secondary">
+			Split dropright
+		</button>
+		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="sr-only">Toggle Dropright</span>
+		</button>
+		<div class="dropdown-menu">
+			<!-- Dropdown menu links -->
+		</div>
+	</div>
 	<section>
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-3">
 					<div class="left-sidebar">
 						<h2>Category</h2>
-						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
+
+
+
+						<!-- <div class="panel-group category-products" id="accordian">
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title">
@@ -129,6 +155,46 @@
 									</div>
 								</div>
 							</div>
+
+
+
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordian" href="#cats">
+											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+											Master c
+										</a>
+									</h4>
+								</div>
+								<div id="cats" class="panel-collapse collapse">
+									<div class="panel-body">
+										<ul>
+											<li><a href="">Sub 1</a></li>
+											<li><a href="">Sub 2</a></li>
+											<li><a href="">Sub 4</a></li>
+											<li><a href="">Dior</a></li>
+											<a data-toggle="collapse" data-parent="#accordianhh" href="#subcat">
+													<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+													Newc
+												</a>
+												<div id="subcat" class="panel-collapse collapse">
+														<div class="panel-body">
+															<ul>
+																<li><a href="">Sub 1</a></li>
+																<li><a href="">Sub 4</a></li>																
+																<li><a href="">Versace</a></li>
+															</ul>
+														</div>
+													</div>
+											<li><a href="">Versace</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+
+
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title"><a href="#">Kids</a></h4>
@@ -164,24 +230,48 @@
 									<h4 class="panel-title"><a href="#">Shoes</a></h4>
 								</div>
 							</div>
-						</div><!--/category-productsr-->
-					
-						<div class="brands_products"><!--brands_products-->
+						</div> -->
+						<!--/category-productsr-->
+
+						<div class="brands_products">
+							<!--brands_products-->
 							<h2>Brands</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
-									<li><a href=""> <span class="pull-right">(50)</span>Acne</a></li>
-									<li><a href=""> <span class="pull-right">(56)</span>Grüne Erde</a></li>
-									<li><a href=""> <span class="pull-right">(27)</span>Albiro</a></li>
-									<li><a href=""> <span class="pull-right">(32)</span>Ronhill</a></li>
-									<li><a href=""> <span class="pull-right">(5)</span>Oddmolly</a></li>
-									<li><a href=""> <span class="pull-right">(9)</span>Boudestijn</a></li>
-									<li><a href=""> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
+									<li>
+										<a href="">
+											<span class="pull-right">(50)</span>Acne</a>
+									</li>
+									<li>
+										<a href="">
+											<span class="pull-right">(56)</span>Grüne Erde</a>
+									</li>
+									<li>
+										<a href="">
+											<span class="pull-right">(27)</span>Albiro</a>
+									</li>
+									<li>
+										<a href="">
+											<span class="pull-right">(32)</span>Ronhill</a>
+									</li>
+									<li>
+										<a href="">
+											<span class="pull-right">(5)</span>Oddmolly</a>
+									</li>
+									<li>
+										<a href="">
+											<span class="pull-right">(9)</span>Boudestijn</a>
+									</li>
+									<li>
+										<a href="">
+											<span class="pull-right">(4)</span>Rösch creative culture</a>
+									</li>
 								</ul>
 							</div>
-						</div><!--/brands_products-->
-						
-            <!--price-range-->
+						</div>
+						<!--/brands_products-->
+
+						<!--price-range-->
 						<!-- <div class="price-range">
 							<h2>Price Range</h2>
 							<div class="well">
@@ -189,57 +279,72 @@
 								 <b>$ 0</b> <b class="pull-right">$ 600</b>
 							</div>
             </div> -->
-            <!--/price-range-->
-						
+						<!--/price-range-->
+
 					</div>
 				</div>
-				
-				<div class="col-sm-9 padding-right">
-					<div class="features_items"><!--features_items-->
-            <h2 class="title text-center">Features Items</h2>
-            <% if( products.length>((page-1)*9+9)){ %>
-              <% max = ((page-1)*9+9) %>
-             <% }else{ %>
-              <% max = products.length %>
-            <% } %>
-             <% for(var i = (page-1)*9;i<max ;i++){ %>
 
-               <div class="col-sm-4">
-                 <div class="product-image-wrapper">
-                   <div class="single-products">
-                     <div class="productinfo text-center">
-                       <img src="<%= products[i].image %>" height="268" width="249" alt="" />
-                       <h2><%= products[i].price %></h2>
-					   <p><%= products[i].name %></p>
-                       <!-- <a href="/order/new/<%= products[i].id %>" style="font-size:95%">Buy now</a>
+				<div class="col-sm-9 padding-right">
+					<div class="features_items">
+						<!--features_items-->
+						<h2 class="title text-center">Features Items</h2>
+						<% if( products.length>((page-1)*9+9)){ %>
+							<% max = ((page-1)*9+9) %>
+								<% }else{ %>
+									<% max = products.length %>
+										<% } %>
+											<% for(var i = (page-1)*9;i<max ;i++){ %>
+
+												<div class="col-sm-4">
+													<div class="product-image-wrapper">
+														<div class="single-products">
+															<div class="productinfo text-center">
+																<img src="<%= products[i].image %>" height="268" width="249" alt="" />
+																<h2>
+																	<%= products[i].price %>
+																</h2>
+																<p>
+																	<%= products[i].name %>
+																</p>
+																<!-- <a href="/order/new/<%= products[i].id %>" style="font-size:95%">Buy now</a>
                     <a href="/cart/<%= products[i].id %>" style="font-size:95%">Add to cart</a>
                         -->
 
-                       <a href="/cart/<%= products[i].ID %>" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                     </div>
-                   </div>
-                   <!-- <div class="choose">
+																<a href="/cart/<%= products[i].ID %>" class="btn btn-default add-to-cart">
+																	<i class="fa fa-shopping-cart"></i>Add to cart</a>
+															</div>
+														</div>
+														<!-- <div class="choose">
                      <ul class="nav nav-pills nav-justified">
                        <li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
                        <li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
                      </ul>
                    </div> -->
-                 </div>
-               </div>
-               <% } %>
-					
-					</div><!--features_items-->
+													</div>
+												</div>
+												<% } %>
+
+					</div>
+					<!--features_items-->
 					<ul class="pagination">
-					  <li class="active"><a href="">1</a></li>
-					  <li><a href="">2</a></li>
-					  <li><a href="">3</a></li>
-					  <li><a href="">&raquo;</a></li>
+						<li class="active">
+							<a href="">1</a>
+						</li>
+						<li>
+							<a href="">2</a>
+						</li>
+						<li>
+							<a href="">3</a>
+						</li>
+						<li>
+							<a href="">&raquo;</a>
+						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</section>
-	
-	
 
-<% include ../partials/footer.ejs %>
+
+
+	<% include ../partials/footer.ejs %>

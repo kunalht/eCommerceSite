@@ -44,5 +44,28 @@ adminMiddleware.getOrderById = (req,res) => {
     })
 }
 
+//Add or modify categories
+adminMiddleware.newCategory = (req,res) => {
+    c.query('select * from categories',(err,categories)=> {
+        if(err){
+            console.log(err)
+        }else{
+            console.log(categories)
+            res.render('categories/new',{categories:categories})
+        }
+    })
+}
 
+adminMiddleware.postCategory = (req,res) => {
+    console.log(req.body)
+    let parentCat = req.body.parentCat ? req.body.parentCat : null
+    let categoryName = req.body.name
+    c.query('insert into categories (name,parent_id) values (:name,:parent_id)',{name:categoryName,parent_id:parentCat},(err,newCategory)=> {
+        if(err){
+            console.log(err)
+        }else{
+            console.log(newCategory)
+        }
+    })
+}
 module.exports = adminMiddleware

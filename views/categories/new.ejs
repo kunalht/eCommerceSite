@@ -1,0 +1,30 @@
+<% include ../partials/header.ejs %>
+
+    <br>
+    <div class="container">
+        <div class="login-form">
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>
+                        Add new category
+                    </h2>
+                    <form action="/admin/newcat" method="POST">
+                        <input type="text" name="name" placeholder="Category Name">
+                        <br>
+                        <h5>Select Parent Category </h4>
+                        <select name="parentCat">
+                            <option value=<%= null %>> No parent category/Master category </option>
+                            <% categories.forEach((cat)=> { %>
+                                <option value="<%= cat.ID %>">
+                                    <%= cat.name %>
+                                </option>
+                                <% }) %>
+                        </select>
+                        <br><br>
+                        <input type="submit" class="btn btn-default add-to-cart" value = "Submit" name="add">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% include ../partials/footer.ejs %>

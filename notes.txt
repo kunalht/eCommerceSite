@@ -105,6 +105,7 @@ req.query.page to 10
 CREATE TABLE categories(
     ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(256),
+    slug VARCHAR(256),
     parent_id INT,
     foreign KEY (parent_id) references categories(ID)
 )ENGINE=InnoDB;
