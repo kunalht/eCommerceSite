@@ -53,29 +53,6 @@
 		</div>
 	</section>
 
-	<!-- Default dropright button -->
-	<div class="btn-group dropright">
-		<button type="button" class="btn btn-secondary">Dropright</button>
-		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<span class="sr-only">Toggle Dropright</span>
-		</button>
-		<div class="dropdown-menu">
-			<!-- Dropdown menu links -->
-		</div>
-	</div>
-
-	<!-- Split dropright button -->
-	<div class="btn-group dropright">
-		<button type="button" class="btn btn-secondary">
-			Split dropright
-		</button>
-		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<span class="sr-only">Toggle Dropright</span>
-		</button>
-		<div class="dropdown-menu">
-			<!-- Dropdown menu links -->
-		</div>
-	</div>
 	<section>
 		<div class="container">
 			<div class="row">
@@ -85,14 +62,14 @@
 
 
 
-						<!-- <div class="panel-group category-products" id="accordian">
+						<div class="panel-group category-products" id="accordian">
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title">
+										<span data-toggle="collapse" data-parent="#accordian"  href="#sportswear">Sportswear</span>
 										<a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Sportswear
-										</a>
+												<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+											</a>
 									</h4>
 								</div>
 								<div id="sportswear" class="panel-collapse collapse">
@@ -193,8 +170,6 @@
 								</div>
 							</div>
 
-
-
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title"><a href="#">Kids</a></h4>
@@ -230,7 +205,7 @@
 									<h4 class="panel-title"><a href="#">Shoes</a></h4>
 								</div>
 							</div>
-						</div> -->
+						</div>
 						<!--/category-productsr-->
 
 						<div class="brands_products">
@@ -288,63 +263,59 @@
 					<div class="features_items">
 						<!--features_items-->
 						<h2 class="title text-center">Features Items</h2>
-						<% if( products.length>((page-1)*9+9)){ %>
-							<% max = ((page-1)*9+9) %>
-								<% }else{ %>
-									<% max = products.length %>
-										<% } %>
-											<% for(var i = (page-1)*9;i<max ;i++){ %>
+						<% products.forEach((product) => { %>
+								<div class="col-sm-4">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<img src="<%= product.image %>" alt="" />
+												<!-- <img src="<#%= product.image %>" height="268" width="249" alt="" /> -->
+												<h2>
+													<%= product.price %>
+												</h2>
+												<p>
+													<a href="/product/<%= product.ID %>"> <%= product.name %> </a>
+												</p>
+												<!-- <a href="/order/new/<%= product.id %>" style="font-size:95%">Buy now</a>
+	<a href="/cart/<%= product.id %>" style="font-size:95%">Add to cart</a>
+		-->
 
-												<div class="col-sm-4">
-													<div class="product-image-wrapper">
-														<div class="single-products">
-															<div class="productinfo text-center">
-																<img src="<%= products[i].image %>" height="268" width="249" alt="" />
-																<h2>
-																	<%= products[i].price %>
-																</h2>
-																<p>
-																	<%= products[i].name %>
-																</p>
-																<!-- <a href="/order/new/<%= products[i].id %>" style="font-size:95%">Buy now</a>
-                    <a href="/cart/<%= products[i].id %>" style="font-size:95%">Add to cart</a>
-                        -->
-
-																<a href="/cart/<%= products[i].ID %>" class="btn btn-default add-to-cart">
-																	<i class="fa fa-shopping-cart"></i>Add to cart</a>
-															</div>
-														</div>
-														<!-- <div class="choose">
-                     <ul class="nav nav-pills nav-justified">
-                       <li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-                       <li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
-                     </ul>
-                   </div> -->
-													</div>
-												</div>
-												<% } %>
+												<a href="/cart/<%= product.ID %>" class="btn btn-default add-to-cart">
+													<i class="fa fa-shopping-cart"></i>Add to cart</a>
+											</div>
+										</div>
+										<!-- <div class="choose">
+	 <ul class="nav nav-pills nav-justified">
+	   <li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+	   <li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
+	 </ul>
+   </div> -->
+									</div>
+								</div>
+						<% }) %>
 
 					</div>
 					<!--features_items-->
 					<ul class="pagination">
-						<li class="active">
-							<a href="">1</a>
-						</li>
-						<li>
-							<a href="">2</a>
-						</li>
-						<li>
-							<a href="">3</a>
-						</li>
-						<li>
-							<a href="">&raquo;</a>
-						</li>
-					</ul>
+					<% for(let i=1;i<=pages;i++){ %>
+							<% if(i == page){ %>
+								<li class="active">
+							<% }else{ %>
+								<li>
+								<% } %>
+								<a href="/products?page=<%=i%>"><%= i %></a>
+							</li>
+							<% } %>
+							<% if(page < pages){ %>
+							<li>
+								<a href="/products?page=<%=page+1%>">&raquo;</a>
+							</li>
+							<% } %>
+						</ul>
 				</div>
 			</div>
 		</div>
 	</section>
-
 
 
 	<% include ../partials/footer.ejs %>

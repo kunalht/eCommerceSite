@@ -1,7 +1,7 @@
 Alter table
 alter table products add column name varchar(20) after name;
 
-CREATE TABLE user(ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+CREATE TABLE user(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
 email VARCHAR(256),
 password VARCHAR(256),
 fullname VARCHAR(256),
@@ -11,7 +11,7 @@ facebook_id VARCHAR(256));
 
 // DESC Name not allowed
 
-Create table products(ID INT AUTO_INCREMENT PRIMARY KEY,
+Create table products(id INT AUTO_INCREMENT PRIMARY KEY,
  name varchar(100),
 image varchar(150),
 price double(10,2),
@@ -22,7 +22,7 @@ isDeleted boolean DEFAULT FALSE
  )ENGINE=InnoDB;
 
 create table user_addr(
-    ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fname varchar(30),
     lname varchar(30),
     address varchar(255),
@@ -72,6 +72,7 @@ create table orders(ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 addr_id INT NOT NULL,
 user_id INT NOT NULL,
 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+status ENUM('ordered','shipped','delivered','cancelled'),
 amount double,
 foreign key (addr_id) references user_addr(ID),
 foreign key (user_id) references user(ID)
@@ -103,9 +104,14 @@ select * from products order by id desc limit 4,5; five rows after 4th
 req.query.page to 10
 
 CREATE TABLE categories(
-    ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(256),
     slug VARCHAR(256),
     parent_id INT,
     foreign KEY (parent_id) references categories(ID)
 )ENGINE=InnoDB;
+
+
+
+TO-DO
+change id to lowercase in each query

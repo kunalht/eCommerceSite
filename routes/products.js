@@ -45,6 +45,7 @@ function resize(req, res, next) {
 router.get("/products", productMiddleware.getAllProducts)
 router.get("/products/new", middlewareObj.checkisAdmin, productMiddleware.getNewProductForm)
 router.post("/products", upload.single('photo'), resize, productMiddleware.addNewProduct)
+router.get("/product/:id",productMiddleware.getProduct)
 // router.post("/products", upload.single('photo'), function (req, res) {
 //       console.log(req.file)
 //       console.log(req.files)

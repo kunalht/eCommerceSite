@@ -34,15 +34,17 @@
             <th> User email </th>
             <th> User's name </th>
             <th> Ordered On  </th>
+            <th> Status </th>
             
         </tr>
         <% orders.forEach((order)=>{ %>
             <tr>
-                <td>   <%= order.ID %> </td>
+                <td> <a href="/admin/orders/<%= order.ID %>"> <%= order.ID %></a> </td>
                     <td> <%= order.amount %></td>
                     <td>  <%= order.email %> </td>
                     <td>  <%= order.nickname %> </td>
                     <td>  <%= order.createdAt %> </td>
+                    <td> <%= order.status %> </td>
                     
                 </tr>
                 <% }) %>

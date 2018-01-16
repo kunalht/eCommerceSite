@@ -11,6 +11,7 @@ router.post('/order', orderMiddleware.postOrder)
 router.post('/order/:id', orderMiddleware.orderPostSingle)
 // router.get('/order/new/:id/add',orderMiddleware.singleOrderAddress)
 router.get('/checkout',orderMiddleware.newOrder)
+router.get('/order/status/:id/:status', orderMiddleware.changeOrderStatus)
 
 //If it's an admin account
 // List of all orders.
