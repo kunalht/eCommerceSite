@@ -53,19 +53,33 @@ productMiddleware.getAllProducts = (req, res) => {
     } else {
         page = req.query.page
     }
+    let category = req.query.cat
     productsInOnePage = 9
     let startNum = parseInt((page - 1) * productsInOnePage)
 
-    let query = `select * from products where isDeleted = FALSE order by createdAt desc limit ${startNum} , 9`
+    let query
+    let countQuery
+    if (category) {
+        query= `select * from products AS P join categories AS C `+
+        `ON P.category_id = C.ID where isDeleted = FALSE AND ( C.ID = ${category} OR C.parent_Id = ${category})`+
+        ` order by createdAt desc limit ${startNum} , 9`;
+        countQuery = `select count(*) as c from products join categories on products.category_id = categories.id where isDeleted = false AND ( categories.ID = ${category} OR categories.parent_Id = ${category})`;
+    } else {
+        query = `select * from products where isDeleted = FALSE order by createdAt desc limit ${startNum} , 9`;
+        countQuery = `select count(*) as c from products where isDeleted = false`
+    }
+
+
+
     c.query(query, (err, products) => {
         if (err) {
             console.log(err)
         } else {
-            c.query('select count(*) as c from products where isDeleted = false', (err, totalProducts) => {
+            c.query(countQuery, (err, totalProducts) => {
                 if (err) {
                     console.log(err)
                 } else {
-                    c.query('select C.name AS cname,C.parent_id AS cparent,C2.name AS parentName' +
+                    c.query('select C.name AS cname,C.parent_id AS cparent,C2.name AS parentName,C.ID AS ID' +
                         ' from categories AS C left join categories AS C2 ON C.parent_id = C2.ID', (err, categories) => {
                             if (err) {
                                 console.log(err)
@@ -78,7 +92,8 @@ productMiddleware.getAllProducts = (req, res) => {
                                     products: products,
                                     page: page,
                                     pages: pages,
-                                    categories: categories
+                                    categories: categories,
+                                    category: category
                                 })
                             }
                         })
@@ -89,18 +104,27 @@ productMiddleware.getAllProducts = (req, res) => {
 }
 
 productMiddleware.getNewProductForm = (req, res) => {
-    res.render("products/new")
+    c.query('select * from categories',(err,categories)=> {
+        if(err){
+            console.log(err)
+        }else{
+            console.log(categories)
+            res.render("products/new",{categories:categories})
+        }
+    })
 }
 
 productMiddleware.addNewProduct = (req, res) => {
-    c.query("insert into products (name,price,image) values (:name,:price,:image)", {
+    c.query("insert into products (name,price,image,category_id) values (:name,:price,:image,:category_id)", {
         name: req.body.name,
         price: req.body.price,
-        image: req.body.photo
-    }, function (err, newlyCreated) {
+        image: req.body.photo,
+        category_id:req.body.category
+    }, (err, newlyCreated) => {
         if (err) {
             console.log(err)
         } else {
+            console.log(req.body)
             res.redirect("/")
         }
     })

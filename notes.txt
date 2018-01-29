@@ -17,8 +17,10 @@ image varchar(150),
 price double(10,2),
 description varchar(200),
 longDesc varchar(600),
+category_id int,
 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-isDeleted boolean DEFAULT FALSE
+isDeleted boolean DEFAULT FALSE,
+foreign key (category_id) references categories(id)
  )ENGINE=InnoDB;
 
 create table user_addr(

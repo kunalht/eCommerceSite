@@ -1,8 +1,21 @@
 <form action="/products" enctype="multipart/form-data" method="POST">
-    <input type="text" name="name" placeholder="Product name"> <br>
-    <input type="number" name="price" placeholder="price"> <br>
+    <input type="text" name="name" placeholder="Product name">
+    <br>
+    <input type="number" name="price" placeholder="price">
+    <br>
     <input type="file" class="btn btn-outline-info waves-effect" name="photo" accept="image/*">
+    <br>
     <!--<input type="text" name="image" placeholder="Photo"> <br>-->
+
+    <select name="category">
+        <% categories.forEach((category)=> { %>
+            <option value="<%= category.ID %>">
+                <%= category.name %>
+            </option>
+            <% }) %>
+    </select>
+    <br>
+    <br>
     <input type="submit">
 
 </form>
