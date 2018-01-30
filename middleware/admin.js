@@ -92,4 +92,16 @@ adminMiddleware.postCategory = (req, res) => {
         }
     })
 }
+
+adminMiddleware.editCategory = ( req, res ) => {
+    let id = req.params.id
+    c.query('select * from category where id = :id',{id:id},(err,changedCat)=>{
+        if(err){
+            console.log(err)
+        }else{
+            res.redirect('back')
+        }
+    })
+}
+
 module.exports = adminMiddleware
