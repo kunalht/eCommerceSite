@@ -1,5 +1,7 @@
 const client = require('mariasql'),
-    mysqlAuth = require('../config/mysqlAuth')
+    mysqlAuth = require('../config/mysqlAuth'),
+    paypalAuth = require('../config/paypal'),
+    paypal = require('paypal-rest-sdk');
 
 const orderMiddleware = {}
 const c = new client({
@@ -10,7 +12,11 @@ const c = new client({
     db: mysqlAuth.mysqlAuth.db
 })
 
-
+paypal.configure({
+    'mode':'sandbox',
+    'client_id':paypalAuth.paypal.client_id,
+    'client_secret': paypalAuth.paypal.client_secret
+});
 orderMiddleware.singleOrder = function (req, res) {
     //If query has item in link
     // SHow that in cart at checkout time
@@ -146,7 +152,6 @@ orderMiddleware.postOrder = function (req, res) {
             foundProduct.forEach(function (item) {
                 curr_total = item.price * item.quantity
                 total += curr_total
-                console.log("FIRST")
             })
             // If address id is provided in query add address ID
             // Else create new address 
@@ -185,17 +190,12 @@ orderMiddleware.postOrder = function (req, res) {
                                             }
                                         })
                                 })
-                                console.log(cartItems)
-                                console.log("finished")
                                 c.query('delete from cart where user_id=:userid', {
                                     userid: userId
                                 }, function (err, clearedCart) {
                                     if (err) {
                                         console.log(err)
                                     } else {
-                                        console.log(clearedCart)
-                                        res.send("done")
-                                        // clearcart
                                     }
                                 })
                             }
@@ -203,7 +203,6 @@ orderMiddleware.postOrder = function (req, res) {
                     }
                 })
             } else {
-                console.log("here")
                 let fname = req.body.fname
                 let lname = req.body.lname
                 let address = req.body.address
@@ -222,7 +221,6 @@ orderMiddleware.postOrder = function (req, res) {
                     if (err) {
                         console.log(err)
                     }
-                    console.log(newAddress)
                     let addr_id = newAddress.info.insertId
                     c.query('insert into orders(addr_id,user_id,amount,status) values (:addr_id,:user_id,:amount,:status)', {
                         addr_id: addr_id,
@@ -233,44 +231,7 @@ orderMiddleware.postOrder = function (req, res) {
                         if (err) {
                             console.log(err)
                         } else {
-                            let order_id = newOrder.info.insertId
-
-                            c.query('SELECT * FROM cart where user_id = :userId', {
-                                userId: userId
-                            }, (err, cartItems) => {
-                                if (err) {
-                                    console.log(err)
-                                } else {
-                                    cartItems.forEach((item) => {
-                                        // c.query('insert into order_item(order_id,item_id,quantity,itemPrice) select :order_id,:itemId,:quantity,price from products where'+
-                                        // 'ID = :itemId',{order_id:order_id,itemId:item.item_id,quantity:item.quantity},(err,addedItem)=>{
-                                        c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,:itemId,:quantity,price from products where ' +
-                                            'ID = :itemId', {
-                                                order_id: order_id,
-                                                itemId: parseInt(item.item_id),
-                                                quantity: item.quantity
-                                            }, (err, addedItem) => {
-                                                if (err) {
-                                                    console.log(err)
-                                                } else {
-                                                    console.log(addedItem)
-                                                }
-                                            })
-                                    })
-                                    console.log(cartItems)
-                                    console.log("finished")
-                                    c.query('delete from cart where user_id=:userid', {
-                                        userid: userId
-                                    }, function (err, clearedCart) {
-                                        if (err) {
-                                            console.log(err)
-                                        } else {
-                                            console.log(clearedCart)
-                                            res.send("done")
-                                        }
-                                    })
-                                }
-                            })
+    
                         }
                     })
                 })
@@ -290,6 +251,80 @@ orderMiddleware.changeOrderStatus = (req, res) => {
             console.log(err)
         } else {
             console.log(updatedOrder)
+            res.redirect('back')
+        }
+    })
+}
+orderMiddleware.paypalTest = (req, res) => {
+    var create_payment_json = {
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": "http://localhost:3000/success",
+            "cancel_url": "http://localhost:3000/"
+        },
+        "transactions": [{
+            "item_list": {
+                "items": [{
+                    "name": "This",
+                    "sku": "001",
+                    "price": "25.00",
+                    "currency": "CAD",
+                    "quantity": 1
+                }]
+            },
+            "amount": {
+                "currency": "CAD",
+                "total": "25.00"
+            },
+            "description": "This is the payment description."
+        }]
+    };
+
+
+
+    paypal.payment.create(create_payment_json, function (error, payment) {
+        if (error) {
+            console.log(err)
+        } else {
+            console.log(payment);
+
+            for(let i=0; i< payment.links.length; i++){
+                if(payment.links[i].rel === 'approval_url'){
+                    res.redirect(payment.links[i].href);
+                }
+            }
+            console.log("Create Payment Response");
+        }
+    });
+}
+
+
+orderMiddleware.successRedirect = (req, res) => {
+    let payerId = req.query.PayerID;
+    let paymentId = req.query.paymentId;
+    var execute_payment_json = {
+        "payer_id": payerId,
+        "transactions": [{
+            "amount": {
+                "currency": "USD",
+                "total": "25.00"
+            }
+        }]
+    };
+    
+    // var paymentId = 'PAYMENT id created in previous step';
+    
+    paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+        if (error) {
+            console.log(error.response);
+            throw error;
+        } else {
+            console.log("Get Payment Response");
+            console.log(JSON.stringify(payment));
+            res.send('success')
         }
     })
 }

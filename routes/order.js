@@ -12,6 +12,8 @@ router.post('/order/:id', orderMiddleware.orderPostSingle)
 // router.get('/order/new/:id/add',orderMiddleware.singleOrderAddress)
 router.get('/checkout',orderMiddleware.newOrder)
 router.get('/order/status/:id/:status', orderMiddleware.changeOrderStatus)
+router.get('/order/paypal/send',orderMiddleware.paypalTest)
+// router.get('/success',orderMiddleware.successRedirect)
 
 //If it's an admin account
 // List of all orders.

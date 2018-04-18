@@ -84,10 +84,8 @@ productMiddleware.getAllProducts = (req, res) => {
                             if (err) {
                                 console.log(err)
                             } else {
-                                console.log(categories)
                                 let count = totalProducts[0].c
                                 let pages = Math.floor(count / productsInOnePage + 1)
-                                console.log(pages)
                                 res.render("products/index", {
                                     products: products,
                                     page: page,
@@ -108,7 +106,6 @@ productMiddleware.getNewProductForm = (req, res) => {
         if(err){
             console.log(err)
         }else{
-            console.log(categories)
             res.render("products/new",{categories:categories})
         }
     })
@@ -124,14 +121,12 @@ productMiddleware.addNewProduct = (req, res) => {
         if (err) {
             console.log(err)
         } else {
-            console.log(req.body)
             res.redirect("/")
         }
     })
 }
 
 productMiddleware.getProduct = (req, res) => {
-    console.log(req.params.id)
     let product_id = req.params.id
 
     c.query('select * from products where id=:id', {
@@ -140,7 +135,6 @@ productMiddleware.getProduct = (req, res) => {
         if (err) {
             console.log(err)
         } else {
-            console.log(foundProduct)
             res.render('products/show', {
                 product: foundProduct
             })
