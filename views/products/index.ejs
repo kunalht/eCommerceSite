@@ -65,13 +65,13 @@
 											<div class="panel panel-default">
 											<div class="panel-heading">
 												<h4 class="panel-title">
-													<a data-toggle="collapse" data-parent="#accordian" href="#<%= category.cname %>">
+													<a data-toggle="collapse" data-parent="#accordian" href="#<%= category.cname.replace(/ /g,'') %>">
 															<span data-toggle="collapse" data-parent="#accordian"  href="#<%= category.cname %>"><%= category.cname %> </span>
 															<span class="badge pull-right"><i class="fa fa-plus"></i></span>
 														<!-- </a> -->
 												</h4>
 											</div>
-											<div id="<%= category.cname %>" class="panel-collapse collapse">
+											<div id="<%= category.cname.replace(/ /g,'') %>" class="panel-collapse collapse">
 												<div class="panel-body">
 													<ul>
 														<% categories.forEach( (cat) => { %>

@@ -13,8 +13,8 @@ const c = new client({
 })
 
 paypal.configure({
-    'mode':'sandbox',
-    'client_id':paypalAuth.paypal.client_id,
+    'mode': 'sandbox',
+    'client_id': paypalAuth.paypal.client_id,
     'client_secret': paypalAuth.paypal.client_secret
 });
 orderMiddleware.singleOrder = function (req, res) {
@@ -131,6 +131,8 @@ orderMiddleware.newOrder = function (req, res) {
     })
 }
 
+
+
 orderMiddleware.postOrder = function (req, res) {
     // insert into order
     // copy data from cart to order_items
@@ -156,8 +158,6 @@ orderMiddleware.postOrder = function (req, res) {
             // If address id is provided in query add address ID
             // Else create new address 
             if (req.query.address) {
-                console.log(req.query)
-                console.log("SECOND")
                 let addr_id = req.query.address
                 c.query('insert into orders(addr_id,user_id,amount,status) values (:addr_id,:user_id,:amount,:status)', {
                     addr_id: addr_id,
@@ -168,38 +168,9 @@ orderMiddleware.postOrder = function (req, res) {
                     if (err) {
                         console.log(err)
                     } else {
-                        // copy items to order_item
                         let order_id = newOrder.info.insertId
-                        c.query('SELECT * FROM cart where user_id = :userId', {
-                            userId: userId
-                        }, (err, cartItems) => {
-                            if (err) {
-                                console.log(err)
-                            } else {
-                                cartItems.forEach((item) => {
-                                    c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,:itemId,:quantity,price from products where ' +
-                                        'ID = :itemId', {
-                                            order_id: order_id,
-                                            itemId: parseInt(item.item_id),
-                                            quantity: item.quantity
-                                        }, (err, addedItem) => {
-                                            if (err) {
-                                                console.log(err)
-                                            } else {
-                                                console.log(addedItem)
-                                            }
-                                        })
-                                })
-                                c.query('delete from cart where user_id=:userid', {
-                                    userid: userId
-                                }, function (err, clearedCart) {
-                                    if (err) {
-                                        console.log(err)
-                                    } else {
-                                    }
-                                })
-                            }
-                        })
+                        moveItemsFromCart(order_id,userId);
+                        res.redirect('back')
                     }
                 })
             } else {
@@ -231,7 +202,9 @@ orderMiddleware.postOrder = function (req, res) {
                         if (err) {
                             console.log(err)
                         } else {
-    
+                            let order_id = newOrder.info.insertId
+                            moveItemsFromCart(order_id,userId);
+                            res.redirect('back')
                         }
                     })
                 })
@@ -240,6 +213,41 @@ orderMiddleware.postOrder = function (req, res) {
     })
 }
 
+let moveItemsFromCart = (orderId,userId) => {
+    // copy items to order_item
+    c.query('SELECT * FROM cart where user_id = :userId', {
+        userId: userId
+    }, (err, cartItems) => {
+        if (err) {
+            console.log(err)
+        } else {
+            cartItems.forEach((item) => {
+                c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,:itemId,:quantity,price from products where ' +
+                    'ID = :itemId', {
+                        order_id: orderId,
+                        itemId: parseInt(item.item_id),
+                        quantity: item.quantity
+                    }, (err, addedItem) => {
+                        if (err) {
+                            console.log(err)
+                        } else {
+                            console.log(addedItem)
+                        }
+                    })
+            })
+            c.query('delete from cart where user_id=:userid', {
+                userid: userId
+            }, function (err, clearedCart) {
+                if (err) {
+                    console.log(err)
+                } else {}
+            })
+        }
+    })
+}
+let paypalOrder = () => {
+
+}
 orderMiddleware.changeOrderStatus = (req, res) => {
     let status = req.params.status
     let orderId = req.params.id
@@ -256,6 +264,7 @@ orderMiddleware.changeOrderStatus = (req, res) => {
     })
 }
 orderMiddleware.paypalTest = (req, res) => {
+    console.log("here")
     var create_payment_json = {
         "intent": "sale",
         "payer": {
@@ -291,8 +300,8 @@ orderMiddleware.paypalTest = (req, res) => {
         } else {
             console.log(payment);
 
-            for(let i=0; i< payment.links.length; i++){
-                if(payment.links[i].rel === 'approval_url'){
+            for (let i = 0; i < payment.links.length; i++) {
+                if (payment.links[i].rel === 'approval_url') {
                     res.redirect(payment.links[i].href);
                 }
             }
@@ -314,9 +323,9 @@ orderMiddleware.successRedirect = (req, res) => {
             }
         }]
     };
-    
+
     // var paymentId = 'PAYMENT id created in previous step';
-    
+
     paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
         if (error) {
             console.log(error.response);

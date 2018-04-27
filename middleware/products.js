@@ -84,6 +84,7 @@ productMiddleware.getAllProducts = (req, res) => {
                             if (err) {
                                 console.log(err)
                             } else {
+                                console.log(categories)
                                 let count = totalProducts[0].c
                                 let pages = Math.floor(count / productsInOnePage + 1)
                                 res.render("products/index", {
