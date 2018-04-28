@@ -13,7 +13,6 @@ var multerOptions = {
       fileFilter(req, file, next) {
             var isPhoto = file.mimetype.startsWith("image/")
             if (isPhoto) {
-                  console.log("is photo")
                   next(null, true)
             } else {
                   // req.flash("error", "File type not allowed")
@@ -46,9 +45,5 @@ router.get("/products", productMiddleware.getAllProducts)
 router.get("/products/new", middlewareObj.checkisAdmin, productMiddleware.getNewProductForm)
 router.post("/products", upload.single('photo'), resize, productMiddleware.addNewProduct)
 router.get("/product/:id",productMiddleware.getProduct)
-// router.post("/products", upload.single('photo'), function (req, res) {
-//       console.log(req.file)
-//       console.log(req.files)
-//       console.log(req.body)
-// })
+
 module.exports = router;

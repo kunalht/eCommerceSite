@@ -9,5 +9,6 @@ router.get('/admin/orders/:id',adminMiddleware.getOrderById)
 router.get('/admin/cat/new',adminMiddleware.newCategory)
 
 router.post('/admin/newcat',adminMiddleware.postCategory)
+router.get('/admin',adminMiddleware.getAdminHomePage)
 
 module.exports = router;

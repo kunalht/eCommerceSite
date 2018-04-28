@@ -28,7 +28,7 @@ send address id, item id and quantity through post request -->
                                         <p> <%= add.state %></p>
                                         <p> <%= add.zip %> </p>
                                         <p> <%= add.phone %></p>
-                                        <form action="/order/?address=<%= add.ID %>" method="POST">
+                                        <form action="/order/?address=<%= add.id %>" method="POST">
                                                 <!-- <i class="fa fa-shopping-cart"></i> -->
                                                 <input type="submit" class="btn btn-default add-to-cart" value = " Checkout at this address" name="add">                                        </form>
                                     </div>
@@ -46,31 +46,20 @@ send address id, item id and quantity through post request -->
                     <p>Enter new address</p>
                     <div class="login-form">
                         <form action="/order" method="POST">
-                            <input type="text" name="fname" placeholder="First Name *">
-                            <input type="text" name="lname" placeholder="Last Name *">
-                            <input type="text" name="address" placeholder="Address *">
-                            <input type="text" name="city" placeholder="Email*">
-                            <input type="text" name="zip" placeholder="Zip / Postal Code *">
+                            <input type="text" name="fname" placeholder="First Name *" required>
+                            <input type="text" name="lname" placeholder="Last Name *" required>
+                            <input type="text" name="city" placeholder="Email*" required>
                             <input type="text" name="phone" placeholder="Phone *">
+                            <input type="text" name="address" placeholder="Address">
+                            <input type="text" name="zip" placeholder="Zip / Postal Code">
                             <input type="text" placeholder="Mobile Phone">
-
-                            <select name="country">
-                                <option>-- State / Province / Region --</option>
-                                <option value="us" >United States</option>
-                                <option>Bangladesh</option>
-                                <option>UK</option>
-                                <option>India</option>
-                                <option>Pakistan</option>
-                                <option>Ucrane</option>
-                                <option>Canada</option>
-                                <option>Dubai</option>
-                            </select>
                             <br>   
                             <br>
                             <br>
                             <br>
                             
-                            <input type="submit" class="btn btn-default add-to-cart" value = " Checkout at this address">                                        </form>
+                            <input type="submit" class="btn btn-default add-to-cart" value = "Proceed to payment">
+                        </form>
                         </form>
                     </div>
                 </div>

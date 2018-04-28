@@ -28,13 +28,7 @@ middlewareObj.logout = function (req, res) {
     res.redirect("back")
 }
 middlewareObj.homePage = function (req, res) {
-    // if (req.user) {
-    //     if (req.user.acc_type == "admin") {
-    //         console.log("ADMIN")
-    //     }
-
-    // }
-    res.render("home")
+    res.redirect('/products')
 }
 
 middlewareObj.checkisAdmin = function (req, res, next) {
@@ -48,7 +42,6 @@ middlewareObj.checkisAdmin = function (req, res, next) {
         //     res.redirect("back")
         // }
     } else {
-        console.log("no admin")
         res.redirect("back")
     }
 }

@@ -72,7 +72,7 @@ E mail : <%= order[0].email %>
         </tr>
         <% items.forEach((item)=>{ %>
             <tr>
-                <td> <%= item.ID %> </td>
+                <td> <%= item.id %> </td>
                     <td> <%= item.name %></td>
                     <td>  <%= item.price %> </td>
                     <td>  <%= item.quantity %> </td>
@@ -84,13 +84,13 @@ E mail : <%= order[0].email %>
     CHANGE ORDER STATUS TO:
     <br>
     <br><br>
-    <a href="/order/status/<%= order[0].ID %>/<%= "ordered" %>"> ordered </a>
+    <a href="/order/status/<%= order[0].id %>/<%= "ordered" %>"> ordered </a>
     <br>
-    <a href="/order/status/<%= order[0].ID %>/<%= "shipped" %>"> shipped </a>
+    <a href="/order/status/<%= order[0].id %>/<%= "shipped" %>"> shipped </a>
     <br>
-    <a href="/order/status/<%= order[0].ID %>/<%= "delivered" %>"> delivered </a>
+    <a href="/order/status/<%= order[0].id %>/<%= "delivered" %>"> delivered </a>
     <br>
-    <a href="/order/status/<%= order[0].ID %>/<%= "cancelled" %>"> cancelled </a>
+    <a href="/order/status/<%= order[0].id %>/<%= "cancelled" %>"> cancelled </a>
     <br>
 
 </body>

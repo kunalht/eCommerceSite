@@ -1,13 +1,17 @@
-Alter table
-alter table products add column name varchar(20) after name;
-
 CREATE TABLE user(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
 email VARCHAR(256),
 password VARCHAR(256),
 fullname VARCHAR(256),
-nickname varchar(50));
+nickname varchar(50))ENGINE=InnoDB;
 
-// DESC Name not allowed
+
+CREATE TABLE categories(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(256),
+    slug VARCHAR(256),
+    parent_id INT,
+    foreign KEY (parent_id) references categories(id)
+)ENGINE=InnoDB;
 
 Create table products(id INT AUTO_INCREMENT PRIMARY KEY,
  name varchar(100),
@@ -21,7 +25,7 @@ isDeleted boolean DEFAULT FALSE,
 foreign key (category_id) references categories(id)
  )ENGINE=InnoDB;
 
-create table user_addr(
+ create table user_addr(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fname varchar(30),
     lname varchar(30),
@@ -37,12 +41,7 @@ ON DELETE CASCADE
 )ENGINE = InnoDB;
 
 
-Query for join
-select * from user_addr join user ON user_addr.user_id = user.id;
-    
-select * from cart join products ON cart.item_id = products.id 
 
-cart table:
 create table cart( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 user_id INT NOT NULL,
 item_id INT NOT NULL,
@@ -51,23 +50,7 @@ foreign key (user_id) references user(id),
 foreign key (item_id) references products(id)
 )ENGINE = InnoDB;
 
-Copy from one db to other
-(copy from cartDB to orderDB)
-INSERT INTO copy SELECT * FROM original;
-CREATE TABLE copy LIKE original;
-ALTER TABLE copy DISABLE KEYS
-INSERT INTO copy SELECT * FROM original;
-ALTER TABLE copy ENABLE KEYS;
- COpy from cart to order:
- insert into order_item(item_id,quantity) select item_id,quantity from cart where user_id=15;
-with data pre existed
-insert into order_item(order_id,item_id,quantity) select 5,item_id,quantity from cart where user_id 15;
 
-SUM all the items
-select sum(quantity) from cart where user_id = 3;
-INSERT INTO copy SELECT * FROM original;
-
-ORDER table:
 create table orders(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 addr_id INT NOT NULL,
 user_id INT NOT NULL,
@@ -78,10 +61,8 @@ foreign key (addr_id) references user_addr(id),
 foreign key (user_id) references user(id)
 )ENGINE=InnoDB;
 
-order_item TABLE:
 
-
-create table order_item(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+create table order_items(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 order_id INT NOT NULL,
 item_id INT NOT NULL,
 quantity INT,
@@ -90,43 +71,35 @@ foreign key (order_id) references orders(id),
 foreign key (item_id) references products(id)
 )ENGINE=InnoDB;
 
-
-create table user_fb(
-    id varchar(256),
-    email varchar(100),
-    name varchar(256),
-    token varchar(256)
-)
-
-select * from products order by id desc limit 4,5; five rows after 4th
-0,10
-1,10
-req.query.page to 10
-
-CREATE TABLE categories(
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(256),
-    slug VARCHAR(256),
-    parent_id INT,
-    foreign KEY (parent_id) references categories(id)
-)ENGINE=InnoDB;
-
 CREATE TABLE paypalOrder(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    paypalId VARCHAR(256),
+    paymentId VARCHAR(256),
     description VARCHAR(256),
     payerId VARCHAR(256),
     token VARCHAR(256),
+    cart VARCHAR(256),
+    paymentMethod VARCHAR(256),
+    payerEmail VARCHAR(256),
+    payerFirstName VARCHAR(256),
+    payerLastName VARCHAR(256),
+    payerShippingName VARCHAR(256),
+    payerAddress VARCHAR(256),
+    payerCity VARCHAR(256),
+    payerPostalCode VARCHAR(256),
+    transactionAmount VARCHAR(256),
+    transactionCurrency VARCHAR(256),
+    merchentId VARCHAR(256),
+    payeeEmail VARCHAR(256),
+    productName VARCHAR(256),
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     amount double(10,2),
-    productId INT
+    productId INT,
+    response TEXT(65530)
 )ENGINE=InnoDB;
+
 
 CREATE TABLE paypalAmount(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     paypalId VARCHAR(256),
     amount VARCHAR(256)
 )ENGINE=InnoDB;
-
-TO-DO
-change id to lowercase in each query

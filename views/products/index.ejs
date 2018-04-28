@@ -45,49 +45,18 @@
 				</div>
 				</div>
 			</div> -->
-	</header>
+	<!-- </header> -->
 
 	<section id="advertisement">
 		<div class="container">
-			<img src="images/shop/advertisement.jpg" alt="" />
+			<img src="/images/shop/advertisement.jpg" alt="" />
 		</div>
 	</section>
 
 	<section>
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-3">
-						<div class="left-sidebar">
-								<h2>Category</h2>
-								<div class="panel-group category-products" id="accordian">
-									<% categories.forEach( (category) => {  %>
-										<% if(category.cparent == null){ %>
-											<div class="panel panel-default">
-											<div class="panel-heading">
-												<h4 class="panel-title">
-													<a data-toggle="collapse" data-parent="#accordian" href="#<%= category.cname.replace(/ /g,'') %>">
-															<span data-toggle="collapse" data-parent="#accordian"  href="#<%= category.cname %>"><%= category.cname %> </span>
-															<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-														<!-- </a> -->
-												</h4>
-											</div>
-											<div id="<%= category.cname.replace(/ /g,'') %>" class="panel-collapse collapse">
-												<div class="panel-body">
-													<ul>
-														<% categories.forEach( (cat) => { %>
-															<% if (cat.parentName == category.cname) { %>
-																<li><a href="/products?cat=<%= cat.ID %>"> <%= cat.cname %> </a></li>
-															<% } %>
-															<% }) %>
-													</ul>
-												</div>
-											</div>
-										</div>
-										<% } %>
-									<% }) %>
-								</div>
-							</div>
-				</div>
+					<% include ../partials/categories.ejs %>
 				<div class="col-sm-9 padding-right">
 					<div class="features_items">
 						<!--features_items-->
@@ -103,13 +72,13 @@
 													<%= product.price %>
 												</h2>
 												<p>
-													<a href="/product/<%= product.ID %>"> <%= product.name %> </a>
+													<a href="/product/<%= product.id %>"> <%= product.name %> </a>
 												</p>
 												<!-- <a href="/order/new/<%= product.id %>" style="font-size:95%">Buy now</a>
 	<a href="/cart/<%= product.id %>" style="font-size:95%">Add to cart</a>
 		-->
 
-												<a href="/cart/<%= product.ID %>" class="btn btn-default add-to-cart">
+												<a href="/cart/<%= product.id %>" class="btn btn-default add-to-cart">
 													<i class="fa fa-shopping-cart"></i>Add to cart</a>
 											</div>
 										</div>

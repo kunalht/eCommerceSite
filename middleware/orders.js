@@ -37,7 +37,7 @@ orderMiddleware.singleOrder = function (req, res) {
             } else {
                 //address find
                 c.query('select * from user_addr where user_id=:id', {
-                        id: req.user.ID
+                        id: req.user.id
                     },
                     function (err, foundAddress) {
                         if (err) {
@@ -74,14 +74,14 @@ orderMiddleware.orderPostSingle = function (req, res) {
                 //ADD address id here
                 c.query('insert into orders(addr_id,user_id,amount) values (:addr_id,:user_id,:amount)', {
                     addr_id: 2,
-                    user_id: req.user.ID,
+                    user_id: req.user.id,
                     amount: totalAmount
                 }, function (err, newOrder) {
                     if (err) {
                         console.log(err)
                     } else {
                         // Add items into order_item table
-                        c.query('insert into order_item(order_id,item_id,quantity) values(:orderId,:itemId,:quantity)', {
+                        c.query('insert into order_items(order_id,item_id,quantity) values(:orderId,:itemId,:quantity)', {
                             orderId: newOrder.info.insertId,
                             itemId: itemId,
                             quantity: req.query.q
@@ -97,9 +97,10 @@ orderMiddleware.newOrder = function (req, res) {
 
     var total = 0
     var curr_total = 0
+    let userId = req.user.id
     // get items from cart
     c.query('select * from cart join products ON cart.item_id=products.id where user_id=:userId', {
-        userId: req.user.ID
+        userId: userId
     }, function (err, foundProduct) {
         if (err) {
             console.log(err)
@@ -112,7 +113,7 @@ orderMiddleware.newOrder = function (req, res) {
             })
             //address find
             c.query('select * from user_addr where user_id=:id', {
-                    id: 1
+                    id: userId
                 },
                 function (err, foundAddress) {
                     if (err) {
@@ -134,14 +135,12 @@ orderMiddleware.newOrder = function (req, res) {
 
 
 orderMiddleware.postOrder = function (req, res) {
-    // insert into order
-    // copy data from cart to order_items
 
     // Check the total price
     var total = 0
     var curr_total = 0
     // get items from cart
-    let userId = req.user.ID
+    let userId = req.user.id
 
     c.query('select * from cart join products ON cart.item_id=products.id where user_id=:userId', {
         userId: userId
@@ -161,7 +160,7 @@ orderMiddleware.postOrder = function (req, res) {
                 let addr_id = req.query.address
                 c.query('insert into orders(addr_id,user_id,amount,status) values (:addr_id,:user_id,:amount,:status)', {
                     addr_id: addr_id,
-                    user_id: req.user.ID,
+                    user_id: req.user.id,
                     amount: total,
                     status: 'ordered'
                 }, function (err, newOrder) {
@@ -170,7 +169,7 @@ orderMiddleware.postOrder = function (req, res) {
                     } else {
                         let order_id = newOrder.info.insertId
                         moveItemsFromCart(order_id,userId);
-                        res.redirect('back')
+                        paypalOrder(req, res, foundProduct, order_id)
                     }
                 })
             } else {
@@ -192,6 +191,7 @@ orderMiddleware.postOrder = function (req, res) {
                     if (err) {
                         console.log(err)
                     }
+                    console.log(newAddress)
                     let addr_id = newAddress.info.insertId
                     c.query('insert into orders(addr_id,user_id,amount,status) values (:addr_id,:user_id,:amount,:status)', {
                         addr_id: addr_id,
@@ -202,15 +202,132 @@ orderMiddleware.postOrder = function (req, res) {
                         if (err) {
                             console.log(err)
                         } else {
+                            console.log(foundProduct)
+                            console.log(order_id)
                             let order_id = newOrder.info.insertId
                             moveItemsFromCart(order_id,userId);
-                            res.redirect('back')
+                            paypalOrder(req, res, foundProduct, order_id)
+                            // res.redirect('back')
                         }
                     })
                 })
             }
         }
     })
+}
+
+orderMiddleware.successOrder = (req, res ) => {
+    console.log(req.query)
+    let payerId = req.query.PayerID;
+    let paymentId = req.query.paymentId;
+    c.query('SELECT amount FROM paypalAmount WHERE paypalId=:paypalId',{paypalId:paymentId},(err,amount) => {
+        if(err){
+            console.log(err)
+        }else{
+            let totalAmount = amount[0].amount
+            console.log(amount[0].amount)
+            var execute_payment_json = {
+                "payer_id": payerId,
+                "transactions": [{
+                    "amount": {
+                        "currency": "CAD",
+                        "total": totalAmount
+                    }
+                }]
+            };        
+            paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+                if (error) {
+                    console.log(error.response);
+                    throw error;
+                } else {
+                    let paymentId = payment.id
+                    let paymentMethod = payment.payer.payment_method
+                    let payerEmail = payment.payer.payer_info.email
+                    let payerId = payment.payer.payer_info.payer_id
+                    let cart = payment.cart
+                    let transactionCurrency = payment.transactions[0].amount.currency
+                    let transactionAmount = payment.transactions[0].amount.total
+                    let response = payment.toString();
+                    // let payerFirstName = payment.payer.payer_info.first_name
+                    // let payerLastName = payment.payer.payer_info.last_name
+                    // let payerShippingName = payment.payer.payer_info.shipping_address.recipient_name
+                    // let payerAddress = payment.payer.payer_info.shipping_address.line1
+                    // let payerCity = payment.payer.payer_info.shipping_address.city
+                    // let payerPostalCode = payment.payer.payer_info.shipping_address.postal_code
+                    // let merchentId = payment.transactions[0].payee.merchant_id
+                    // let payeeEmail = payment.transactions[0].payee.email
+                    // let description = payment.transactions[0].description
+                    // let productName = payment.transactions[0].item_list.items[0].name
+                    
+                    c.query('INSERT INTO paypalOrder(paymentId,cart,paymentMethod,payerEmail,payerId,transactionCurrency,transactionAmount,response) '+
+                        'VALUES(:paymentId,:cart,:paymentMethod,:payerEmail,:payerId,:transactionCurrency,:transactionAmount)',
+                        {paymentId:paymentId,cart:cart,paymentMethod:paymentMethod,payerEmail:payerEmail,payerId:payerId,
+                            transactionCurrency:transactionCurrency,transactionAmount:transactionAmount,response:response},(err,newPyapal)=>{
+                                console.log(newPyapal)
+                            })
+                    console.log("Get Payment Response");
+                    console.log(JSON.stringify(payment));
+                    res.send('success')
+                }
+            })
+        }
+    })
+}
+
+orderMiddleware.cancelOrder = (req, res) => {
+    console.log(req.query)
+}
+
+let paypalOrder = (req, res, foundProduct, order_id) => {
+    let productId = foundProduct[0].id
+    var create_payment_json = {
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": "http://localhost:3000/order_success",
+            "cancel_url": "http://localhost:3000/order_cancel"
+        },
+        "transactions": [{
+            "item_list": {
+                "items": [{
+                    "name": foundProduct[0].name,
+                    "sku": foundProduct[0].id,
+                    "price": foundProduct[0].price,
+                    "orderId":order_id,
+                    "currency": "CAD",
+                    "quantity": 1
+                }]
+            },
+            "amount": {
+                "currency": "CAD",
+                "total": foundProduct[0].price
+            },
+            "description": ` Product ID: ${productId} and order id : ${order_id}`
+        }]
+    };
+
+    paypal.payment.create(create_payment_json, function (error, payment) {
+        if (error) {
+            console.log(error)
+        } else {
+            let paypalId = payment.id
+            let amount = payment.transactions[0].amount.total
+            console.log(JSON.stringify(payment))    
+            for (let i = 0; i < payment.links.length; i++) {
+                if (payment.links[i].rel === 'approval_url') {
+                    c.query('INSERT INTO paypalAmount(paypalId, amount) VALUES(:paypalId,:amount)',{paypalId:paypalId,amount:amount},(err, newAmount)=> {
+                        if(err){
+                            console.log(err)
+                        }else{
+                            res.redirect(payment.links[i].href);
+                        }
+                    })
+                }
+            }
+        }
+    });
 }
 
 let moveItemsFromCart = (orderId,userId) => {
@@ -223,7 +340,7 @@ let moveItemsFromCart = (orderId,userId) => {
         } else {
             cartItems.forEach((item) => {
                 c.query('insert into order_items(order_id,item_id,quantity,itemPrice) select :order_id,:itemId,:quantity,price from products where ' +
-                    'ID = :itemId', {
+                    'id = :itemId', {
                         order_id: orderId,
                         itemId: parseInt(item.item_id),
                         quantity: item.quantity
@@ -245,9 +362,7 @@ let moveItemsFromCart = (orderId,userId) => {
         }
     })
 }
-let paypalOrder = () => {
 
-}
 orderMiddleware.changeOrderStatus = (req, res) => {
     let status = req.params.status
     let orderId = req.params.id

@@ -68,16 +68,20 @@ passport.use(new LocalStrategy({
                     newUser.email = email
                     newUser.password = password
                     var hash = bcrypt.hashSync(password)
-                    c.query('insert into user (email, password,loginwith) values (:email,:password,"email")',
+                    c.query('insert into user (email, password) values (:email,:password)',
                         { email: newUser.email, password: hash },
                         function (err, rows) {
-                            req.login(newUser, function (err) {
-                                if (err) {
-                                    console.log(err)
-                                } else {
-                                    return done(null, newUser)
-                                }
-                            })
+                            if(err){
+                                console.log(err)
+                            }else{
+                                req.login(newUser, function (err) {
+                                    if (err) {
+                                        console.log(err)
+                                    } else {
+                                        return done(null, newUser)
+                                    }
+                                })
+                            }
                         })
                 }
             }

@@ -60,17 +60,14 @@ productMiddleware.getAllProducts = (req, res) => {
     let query
     let countQuery
     if (category) {
-        query= `select * from products AS P join categories AS C `+
-        `ON P.category_id = C.ID where isDeleted = FALSE AND ( C.ID = ${category} OR C.parent_Id = ${category})`+
-        ` order by createdAt desc limit ${startNum} , 9`;
-        countQuery = `select count(*) as c from products join categories on products.category_id = categories.id where isDeleted = false AND ( categories.ID = ${category} OR categories.parent_Id = ${category})`;
+        query = `select * from products AS P join categories AS C ` +
+            `ON P.category_id = C.id where isDeleted = FALSE AND ( C.id = ${category} OR C.parent_Id = ${category})` +
+            ` order by createdAt desc limit ${startNum} , 9`;
+        countQuery = `select count(*) as c from products join categories on products.category_id = categories.id where isDeleted = false AND ( categories.id = ${category} OR categories.parent_Id = ${category})`;
     } else {
         query = `select * from products where isDeleted = FALSE order by createdAt desc limit ${startNum} , 9`;
         countQuery = `select count(*) as c from products where isDeleted = false`
     }
-
-
-
     c.query(query, (err, products) => {
         if (err) {
             console.log(err)
@@ -79,12 +76,11 @@ productMiddleware.getAllProducts = (req, res) => {
                 if (err) {
                     console.log(err)
                 } else {
-                    c.query('select C.name AS cname,C.parent_id AS cparent,C2.name AS parentName,C.ID AS ID' +
-                        ' from categories AS C left join categories AS C2 ON C.parent_id = C2.ID', (err, categories) => {
+                    c.query('select C.name AS cname,C.parent_id AS cparent,C2.name AS parentName,C.id AS id' +
+                        ' from categories AS C left join categories AS C2 ON C.parent_id = C2.id', (err, categories) => {
                             if (err) {
                                 console.log(err)
                             } else {
-                                console.log(categories)
                                 let count = totalProducts[0].c
                                 let pages = Math.floor(count / productsInOnePage + 1)
                                 res.render("products/index", {
@@ -103,11 +99,13 @@ productMiddleware.getAllProducts = (req, res) => {
 }
 
 productMiddleware.getNewProductForm = (req, res) => {
-    c.query('select * from categories',(err,categories)=> {
-        if(err){
+    c.query('select * from categories', (err, categories) => {
+        if (err) {
             console.log(err)
-        }else{
-            res.render("products/new",{categories:categories})
+        } else {
+            res.render("products/new", {
+                categories: categories
+            })
         }
     })
 }
@@ -117,7 +115,7 @@ productMiddleware.addNewProduct = (req, res) => {
         name: req.body.name,
         price: req.body.price,
         image: req.body.photo,
-        category_id:req.body.category
+        category_id: req.body.category
     }, (err, newlyCreated) => {
         if (err) {
             console.log(err)
@@ -128,20 +126,30 @@ productMiddleware.addNewProduct = (req, res) => {
 }
 
 productMiddleware.getProduct = (req, res) => {
+
+    c.query('select C.name AS cname,C.parent_id AS cparent,C2.name AS parentName,C.id AS id' +
+        ' from categories AS C left join categories AS C2 ON C.parent_id = C2.id', (err, categories) => {
+            if (err) {
+                console.log(err)
+            } else {
+                c.query('select * from products where id=:id', {
+                    id: product_id
+                }, (err, foundProduct) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        console.log(foundProduct)
+                        res.render('products/show', {
+                            product: foundProduct[0],
+                            categories: categories
+                        })
+                    }
+                })
+            }
+        })
+
     let product_id = req.params.id
 
-    c.query('select * from products where id=:id', {
-        id: product_id
-    }, (err, foundProduct) => {
-        if (err) {
-            console.log(err)
-        } else {
-            res.render('products/show', {
-                product: foundProduct
-            })
-
-        }
-    })
 }
 
 
