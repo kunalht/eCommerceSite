@@ -217,7 +217,6 @@ orderMiddleware.postOrder = function (req, res) {
 }
 
 orderMiddleware.successOrder = (req, res ) => {
-    console.log(req.query)
     let payerId = req.query.PayerID;
     let paymentId = req.query.paymentId;
     c.query('SELECT amount FROM paypalAmount WHERE paypalId=:paypalId',{paypalId:paymentId},(err,amount) => {
@@ -237,6 +236,7 @@ orderMiddleware.successOrder = (req, res ) => {
             };        
             paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
                 if (error) {
+                    console.log("ERROR HERE")
                     console.log(error.response);
                     throw error;
                 } else {
@@ -311,6 +311,7 @@ let paypalOrder = (req, res, foundProduct, order_id) => {
     paypal.payment.create(create_payment_json, function (error, payment) {
         if (error) {
             console.log(error)
+            JSON.stringify(error)
         } else {
             let paypalId = payment.id
             let amount = payment.transactions[0].amount.total
