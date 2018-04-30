@@ -1,7 +1,6 @@
 const client = require('mariasql'),
     session = require('express-session'),
-    mysqlAuth = require('../config/mysqlAuth')
-
+    mysqlAuth = require('../config/mysqlAuth');
 
 const cartMiddleware = {}
 const c = new client({
@@ -12,9 +11,7 @@ const c = new client({
     db: mysqlAuth.mysqlAuth.db
 })
 
-
 cartMiddleware.addToCart = function (req, res) {
-    if (req.isAuthenticated()) {
         //check if item already exist with for loop
         c.query('SELECT * FROM CART WHERE user_id=:userid AND item_id=:itemid', {
                 userid: req.user.id,
@@ -25,20 +22,20 @@ cartMiddleware.addToCart = function (req, res) {
                     console.log(err)
                 } else {
                     if (items.length > 0) {
-                        item_value = items[0].quantity
-                        item_value++
-                        //if it does increase the quantity
-                        c.query('UPDATE cart set quantity=:quantity where user_id=:userid AND item_id=:itemid', {
-                                quantity: item_value,
-                                userid: req.user.id,
-                                itemid: req.params.id
-                            },
-                            function (err, items) {
-                                if (err) {
-                                    console.log(err)
-                                } else {
-                                }
-                            })
+                        // item_value = items[0].quantity
+                        // item_value++
+                        // //if it does increase the quantity
+                        // c.query('UPDATE cart set quantity=:quantity where user_id=:userid AND item_id=:itemid', {
+                        //         quantity: item_value,
+                        //         userid: req.user.id,
+                        //         itemid: req.params.id
+                        //     },
+                        //     function (err, items) {
+                        //         if (err) {
+                        //             console.log(err)
+                        //         } else {
+                        //         }
+                        //     })
                     } else {
                         //else create new iteam at length+1 location
                         c.query('INSERT INTO CART(user_id,item_id) values(:userid,:itemid)', {
@@ -55,8 +52,7 @@ cartMiddleware.addToCart = function (req, res) {
                     }
                 }
             })
-    }
-    res.redirect('/checkout')
+            res.redirect('/checkout')
 }
 
 cartMiddleware.cart = function (req, res) {

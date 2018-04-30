@@ -1,55 +1,8 @@
 <% include ../partials/header.ejs %>
 
-	<!--/header-middle-->
-
-	<!-- <div class="header-bottom">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="index.html">Home</a></li>
-								<li class="dropdown"><a href="#" class="active">Shop<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.html" class="active">Products</a></li>
-										<li><a href="product-details.html">Product Details</a></li> 
-										<li><a href="checkout.html">Checkout</a></li> 
-										<li><a href="cart.html">Cart</a></li> 
-										<li><a href="login.html">Login</a></li> 
-                                    </ul>
-                                </li> 
-								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="blog.html">Blog List</a></li>
-										<li><a href="blog-single.html">Blog Single</a></li>
-                                    </ul>
-                                </li> 
-								<li><a href="404.html">404</a></li>
-								<li><a href="contact-us.html">Contact</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="search_box pull-right">
-							<input type="text" placeholder="Search"/>
-						</div>
-					</div>
-				</div>
-				</div>
-			</div> -->
-	<!-- </header> -->
-
 	<section id="advertisement">
 		<div class="container">
-			<img src="/images/shop/advertisement.jpg" alt="" />
+			<!-- <img src="/images/shop/advertisement.jpg" alt="" /> -->
 		</div>
 	</section>
 
@@ -74,20 +27,10 @@
 												<p>
 													<a href="/product/<%= product.id %>"> <%= product.name %> </a>
 												</p>
-												<!-- <a href="/order/new/<%= product.id %>" style="font-size:95%">Buy now</a>
-	<a href="/cart/<%= product.id %>" style="font-size:95%">Add to cart</a>
-		-->
-
 												<a href="/cart/<%= product.id %>" class="btn btn-default add-to-cart">
 													<i class="fa fa-shopping-cart"></i>Add to cart</a>
 											</div>
 										</div>
-										<!-- <div class="choose">
-	 <ul class="nav nav-pills nav-justified">
-	   <li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-	   <li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
-	 </ul>
-   </div> -->
 									</div>
 								</div>
 						<% }) %>

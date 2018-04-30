@@ -168,7 +168,8 @@ orderMiddleware.postOrder = function (req, res) {
                         console.log(err)
                     } else {
                         let order_id = newOrder.info.insertId
-                        moveItemsFromCart(order_id,userId);
+                        moveItemsFromCart(order_id, userId);
+                        console.log(`order id first is ${order_id}`)
                         paypalOrder(req, res, foundProduct, order_id)
                     }
                 })
@@ -205,7 +206,7 @@ orderMiddleware.postOrder = function (req, res) {
                             console.log(foundProduct)
                             console.log(order_id)
                             let order_id = newOrder.info.insertId
-                            moveItemsFromCart(order_id,userId);
+                            moveItemsFromCart(order_id, userId);
                             paypalOrder(req, res, foundProduct, order_id)
                             // res.redirect('back')
                         }
@@ -216,24 +217,26 @@ orderMiddleware.postOrder = function (req, res) {
     })
 }
 
-orderMiddleware.successOrder = (req, res ) => {
+orderMiddleware.successOrder = (req, res) => {
     let payerId = req.query.PayerID;
     let paymentId = req.query.paymentId;
-    c.query('SELECT amount FROM paypalAmount WHERE paypalId=:paypalId',{paypalId:paymentId},(err,amount) => {
-        if(err){
+    let userId = req.user.id
+    c.query('SELECT amount FROM paypalAmount WHERE paypalId=:paypalId', {
+        paypalId: paymentId
+    }, (err, amount) => {
+        if (err) {
             console.log(err)
-        }else{
+        } else {
             let totalAmount = amount[0].amount
-            console.log(amount[0].amount)
             var execute_payment_json = {
                 "payer_id": payerId,
                 "transactions": [{
                     "amount": {
                         "currency": "CAD",
-                        "total": totalAmount
+                        "total": amount[0].amount
                     }
                 }]
-            };        
+            };
             paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
                 if (error) {
                     console.log("ERROR HERE")
@@ -247,7 +250,8 @@ orderMiddleware.successOrder = (req, res ) => {
                     let cart = payment.cart
                     let transactionCurrency = payment.transactions[0].amount.currency
                     let transactionAmount = payment.transactions[0].amount.total
-                    let response = payment.toString();
+                    // let response = payment.toString();
+                    let response = JSON.stringify(payment).toString()
                     // let payerFirstName = payment.payer.payer_info.first_name
                     // let payerLastName = payment.payer.payer_info.last_name
                     // let payerShippingName = payment.payer.payer_info.shipping_address.recipient_name
@@ -258,16 +262,28 @@ orderMiddleware.successOrder = (req, res ) => {
                     // let payeeEmail = payment.transactions[0].payee.email
                     // let description = payment.transactions[0].description
                     // let productName = payment.transactions[0].item_list.items[0].name
-                    
-                    c.query('INSERT INTO paypalOrder(paymentId,cart,paymentMethod,payerEmail,payerId,transactionCurrency,transactionAmount,response) '+
-                        'VALUES(:paymentId,:cart,:paymentMethod,:payerEmail,:payerId,:transactionCurrency,:transactionAmount)',
-                        {paymentId:paymentId,cart:cart,paymentMethod:paymentMethod,payerEmail:payerEmail,payerId:payerId,
-                            transactionCurrency:transactionCurrency,transactionAmount:transactionAmount,response:response},(err,newPyapal)=>{
+
+                    c.query('INSERT INTO paypalOrder(paymentId,cart,paymentMethod,payerEmail,payerId,transactionCurrency,transactionAmount,response,userId) ' +
+                        'VALUES(:paymentId,:cart,:paymentMethod,:payerEmail,:payerId,:transactionCurrency,:transactionAmount,:response,:userId)', {
+                            paymentId: paymentId,
+                            cart: cart,
+                            paymentMethod: paymentMethod,
+                            payerEmail: payerEmail,
+                            payerId: payerId,
+                            transactionCurrency: transactionCurrency,
+                            transactionAmount: transactionAmount,
+                            response: response,
+                            userId:userId
+                        }, (err, newPyapal) => {
+                            if(err){
+                                console.log(err)
+                            }else{
                                 console.log(newPyapal)
-                            })
-                    console.log("Get Payment Response");
-                    console.log(JSON.stringify(payment));
-                    res.send('success')
+                                console.log("Get Payment Response");
+                                console.log(JSON.stringify(payment));
+                                res.send('success')
+                            }
+                        })
                 }
             })
         }
@@ -280,6 +296,7 @@ orderMiddleware.cancelOrder = (req, res) => {
 
 let paypalOrder = (req, res, foundProduct, order_id) => {
     let productId = foundProduct[0].id
+    console.log(`order id at paypal order is ${order_id}`)
     var create_payment_json = {
         "intent": "sale",
         "payer": {
@@ -295,7 +312,6 @@ let paypalOrder = (req, res, foundProduct, order_id) => {
                     "name": foundProduct[0].name,
                     "sku": foundProduct[0].id,
                     "price": foundProduct[0].price,
-                    "orderId":order_id,
                     "currency": "CAD",
                     "quantity": 1
                 }]
@@ -310,18 +326,21 @@ let paypalOrder = (req, res, foundProduct, order_id) => {
 
     paypal.payment.create(create_payment_json, function (error, payment) {
         if (error) {
-            console.log(error)
-            JSON.stringify(error)
+            console.log("error")
         } else {
             let paypalId = payment.id
             let amount = payment.transactions[0].amount.total
-            console.log(JSON.stringify(payment))    
+            let userId = req.user.id
             for (let i = 0; i < payment.links.length; i++) {
                 if (payment.links[i].rel === 'approval_url') {
-                    c.query('INSERT INTO paypalAmount(paypalId, amount) VALUES(:paypalId,:amount)',{paypalId:paypalId,amount:amount},(err, newAmount)=> {
-                        if(err){
+                    c.query('INSERT INTO paypalAmount(paypalId, amount,userId) VALUES(:paypalId,:amount,:userId)', {
+                        paypalId: paypalId,
+                        amount: amount,
+                        userId:userId
+                    }, (err, newAmount) => {
+                        if (err) {
                             console.log(err)
-                        }else{
+                        } else {
                             res.redirect(payment.links[i].href);
                         }
                     })
@@ -331,7 +350,7 @@ let paypalOrder = (req, res, foundProduct, order_id) => {
     });
 }
 
-let moveItemsFromCart = (orderId,userId) => {
+let moveItemsFromCart = (orderId, userId) => {
     // copy items to order_item
     c.query('SELECT * FROM cart where user_id = :userId', {
         userId: userId
@@ -379,52 +398,6 @@ orderMiddleware.changeOrderStatus = (req, res) => {
         }
     })
 }
-orderMiddleware.paypalTest = (req, res) => {
-    console.log("here")
-    var create_payment_json = {
-        "intent": "sale",
-        "payer": {
-            "payment_method": "paypal"
-        },
-        "redirect_urls": {
-            "return_url": "http://localhost:3000/success",
-            "cancel_url": "http://localhost:3000/"
-        },
-        "transactions": [{
-            "item_list": {
-                "items": [{
-                    "name": "This",
-                    "sku": "001",
-                    "price": "25.00",
-                    "currency": "CAD",
-                    "quantity": 1
-                }]
-            },
-            "amount": {
-                "currency": "CAD",
-                "total": "25.00"
-            },
-            "description": "This is the payment description."
-        }]
-    };
-
-
-
-    paypal.payment.create(create_payment_json, function (error, payment) {
-        if (error) {
-            console.log(err)
-        } else {
-            console.log(payment);
-
-            for (let i = 0; i < payment.links.length; i++) {
-                if (payment.links[i].rel === 'approval_url') {
-                    res.redirect(payment.links[i].href);
-                }
-            }
-            console.log("Create Payment Response");
-        }
-    });
-}
 
 
 orderMiddleware.successRedirect = (req, res) => {
@@ -447,7 +420,6 @@ orderMiddleware.successRedirect = (req, res) => {
             console.log(error.response);
             throw error;
         } else {
-            console.log("Get Payment Response");
             console.log(JSON.stringify(payment));
             res.send('success')
         }

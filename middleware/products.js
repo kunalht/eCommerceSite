@@ -111,15 +111,31 @@ productMiddleware.getNewProductForm = (req, res) => {
 }
 
 productMiddleware.addNewProduct = (req, res) => {
-    c.query("insert into products (name,price,image,category_id) values (:name,:price,:image,:category_id)", {
+    let description = req.body.desc
+    let firstImage = req.body.photos[0]
+    c.query("insert into products (name,price,category_id,image,longDesc) values (:name,:price,:category_id,:image,:desc)", {
         name: req.body.name,
         price: req.body.price,
-        image: req.body.photo,
-        category_id: req.body.category
+        category_id: req.body.category,
+        image: firstImage,
+        desc:description
     }, (err, newlyCreated) => {
         if (err) {
             console.log(err)
         } else {
+            let productId = newlyCreated.info.insertId
+            req.body.photos.forEach((photo) => {
+                c.query('INSERT INTO product_image(product_id,image) VALUES(:productId,:image)', {
+                    productId: productId,
+                    image: photo
+                }, (err, newImage) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        console.log(newImage)
+                    }
+                })
+            })
             res.redirect("/")
         }
     })
@@ -132,15 +148,15 @@ productMiddleware.getProduct = (req, res) => {
             if (err) {
                 console.log(err)
             } else {
-                c.query('select * from products where id=:id', {
+                c.query('select * from products JOIN product_image ON products.id = product_image.product_id where products.id=:id', {
                     id: product_id
                 }, (err, foundProduct) => {
                     if (err) {
                         console.log(err)
                     } else {
-                        console.log(foundProduct)
+                        console.log(foundProduct.length)
                         res.render('products/show', {
-                            product: foundProduct[0],
+                            product: foundProduct,
                             categories: categories
                         })
                     }

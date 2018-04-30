@@ -1,21 +1,50 @@
-<form action="/products" enctype="multipart/form-data" method="POST">
-    <input type="text" name="name" placeholder="Product name">
-    <br>
-    <input type="number" name="price" placeholder="price">
-    <br>
-    <input type="file" class="btn btn-outline-info waves-effect" name="photo" accept="image/*">
-    <br>
-    <!--<input type="text" name="image" placeholder="Photo"> <br>-->
+<% include ../partials/header.ejs %>
 
-    <select name="category">
-        <% categories.forEach((category)=> { %>
+  <div class="container">
+
+    <form action="/products" enctype="multipart/form-data" method="POST">
+      <div class="form-group row">
+        <label for="example-text-input" class="col-2 col-form-label">Product Name</label>
+        <div class="col-10">
+          <input class="form-control" type="text" name="name" placeholder="Product name" id="example-text-input">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="example-text-input" class="col-2 col-form-label">Product Price</label>
+        <div class="col-10">
+          <input class="form-control" type="number" name="price" placeholder="Product Price" id="example-text-input">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="example-email-input" class="col-2 col-form-label">Product Image Thumbnail</label>
+        <div class="col-10">
+          <input type="file" class="btn btn-outline-info waves-effect" name="photo" accept="image/*" multiple>
+          <input type="file" class="btn btn-outline-info waves-effect" name="photo2" accept="image/*" multiple>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="example-text-input" class="col-2 col-form-label">Product Description</label>
+        <div class="col-10">
+          <textarea class="form-control" rows="10" cols="50" type="text" name="desc"  id="example-text-input"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group row">
+
+        <select name="category">
+          <% categories.forEach((category)=> { %>
             <option value="<%= category.id %>">
-                <%= category.name %>
+              <%= category.name %>
             </option>
             <% }) %>
-    </select>
-    <br>
-    <br>
-    <input type="submit">
+        </select>
+      </div>
+      <br>
+      <div class="form-group row">
+        <input type="submit" class="btn btn-info">
+      </div>
 
-</form>
+    </form>
+  </div>

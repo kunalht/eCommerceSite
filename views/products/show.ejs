@@ -15,17 +15,21 @@
                                 <div id="similar-product" class="carousel slide" data-ride="carousel">
                                     <!-- Wrapper for slides -->
                                     <div class="carousel-inner">
-                                        <div class="item active">
-                                            <img src="/<%= product.image %>">
-
-                                        </div>
+                                        <% if(product.length >= 2){ %>
+                                            <div class="item active">
+                                                <img src="/<%= product[1].image %>">
+                                            </div>
+                                            <% } %>
+                                            <% if(product.length >= 3){ %>
                                         <div class="item">
-                                            <img src="/<%= product.image %>">
-
+                                            <img src="/<%= product[2].image %>">
                                         </div>
+                                        <% } %>
+                                        <% if(product.length >= 4){ %>
                                         <div class="item">
-                                            <img src="/<%= product.image %>">
+                                            <img src="/<%= product[3].image %>">
                                         </div>
+                                        <% } %>
                                     </div>
                                 </div>
                             </div>
@@ -33,37 +37,55 @@
                                 <!-- Wrapper for slides -->
                                 <div class="carousel-inner">
                                     <div class="item active">
+                                            <% if(product.length >= 2){ %>
                                         <a href="">
-                                            <img src="/images/product-details/similar1.jpg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="/images/product-details/similar2.jpg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="/images/product-details/similar3.jpg" alt="">
-                                        </a>
+                                                <img src="/<%= product[1].image %>" height="84" width="84">
+                                            </a>
+                                                <% } %>
+                                                <% if(product.length >= 3){ %>
+                                                    <a href="">
+                                                            <img src="/<%= product[2].image %>"  height="84" width="84">
+                                                        </a>
+                                            <% } %>
+                                            <% if(product.length >= 4){ %>
+                                                <a href="">
+                                                        <img src="/<%= product[3].image %>"  height="84" width="84">
+                                                    </a>
+                                            <% } %>               
                                     </div>
                                     <div class="item">
-                                        <a href="">
-                                            <img src="/images/product-details/similar1.jpg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="/images/product-details/similar2.jpg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="/images/product-details/similar3.jpg" alt="">
-                                        </a>
+                                            <% if(product.length >= 2){ %>
+                                                <a href="">
+                                                        <img src="/<%= product[1].image %>" height="84" width="84">
+                                                    </a>
+                                                        <% } %>
+                                                        <% if(product.length >= 3){ %>
+                                                            <a href="">
+                                                                    <img src="/<%= product[2].image %>"  height="84" width="84">
+                                                                </a>
+                                                    <% } %>
+                                                    <% if(product.length >= 4){ %>
+                                                        <a href="">
+                                                                <img src="/<%= product[3].image %>"  height="84" width="84">
+                                                            </a>
+                                                    <% } %>  
                                     </div>
                                     <div class="item">
-                                        <a href="">
-                                            <img src="/images/product-details/similar1.jpg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="/images/product-details/similar2.jpg" alt="">
-                                        </a>
-                                        <a href="">
-                                            <img src="/images/product-details/similar3.jpg" alt="">
-                                        </a>
+                                            <% if(product.length >= 2){ %>
+                                                <a href="">
+                                                        <img src="/<%= product[1].image %>" height="84" width="84">
+                                                    </a>
+                                                        <% } %>
+                                                        <% if(product.length >= 3){ %>
+                                                            <a href="">
+                                                                    <img src="/<%= product[2].image %>"  height="84" width="84">
+                                                                </a>
+                                                    <% } %>
+                                                    <% if(product.length >= 4){ %>
+                                                        <a href="">
+                                                                <img src="/<%= product[3].image %>"  height="84" width="84">
+                                                            </a>
+                                                    <% } %>  
                                     </div>
                                 </div>
                                 <!-- Controls -->
@@ -75,16 +97,15 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-sm-7">
-                            <div class="product-information">
+                        <div class="col-sm-7" style="padding-top:40px;">
+                            <div class="product-information" >
                                 <!--/product-information-->
-                                <img src="/images/product-details/new.jpg" class="newarrival" alt="" />
                                 <h2>Logo Design</h2>
                                 <span>
                                     <span>$
-                                        <%= product.price %>
+                                        <%= product[0].price %>
                                     </span>
-                                    <a class="btn btn-fefault cart" href="/cart/<%= product.id %>">
+                                    <a class="btn btn-fefault cart" href="/cart/<%= product[0].id %>">
                                         <i class="fa fa-shopping-cart"></i>
                                         Place Order
                                     </a>
@@ -109,10 +130,8 @@
                         <div class="tab-content">
                             <div class="single-blog-post product-details">
                                 <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                                    ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                    cillum dolore eu fugiat nulla pariatur.</p>
+                                    <%= product[0].longDesc %>
+                                </p>
                                 <br>
                                 <p>
                                     Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis

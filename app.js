@@ -91,19 +91,16 @@ passport.use('local-login', new LocalStrategy({
     passReqToCallback: true
 },
     function (req, email, password, done) {
-        console.log(password)
         c.query("select * from user where email=:email", { email: email }, function (err, foundUser) {
             if (err) {
                 console.log(err)
                 // return done(err)
             } else if (!foundUser.length) {
-                console.log("No user found")
                 return done(null, false)
                 // return done(null)
             } else {
                 bcrypt.compare(password, foundUser[0].password, function (err, res) {
                     if (res == false) {
-                        console.log('wrong password')
                         return done(null, false)
                     } else {
                         req.login(foundUser[0], function (err) {
@@ -179,6 +176,6 @@ app.use(adminRoutes)
 
 
 
-app.listen("3007", function () {
+app.listen("3000", function () {
     console.log("Server started")
 })

@@ -2,7 +2,7 @@ const passport = require("passport"),
     client = require('mariasql'),
     bcrypt = require("bcrypt-nodejs"),
     mysqlAuth = require('../config/mysqlAuth')
-    
+
 
 
 const middlewareObj = {};
@@ -16,7 +16,8 @@ const c = new client({
 })
 
 middlewareObj.getLogin = function (req, res) {
-    res.render("login")
+    let notLoggedInError = res.locals.isLoggedInError;
+    res.render("login",{notLoggedInError:notLoggedInError})
 }
 
 middlewareObj.getRegister = function (req, res) {
@@ -31,9 +32,24 @@ middlewareObj.homePage = function (req, res) {
     res.redirect('/products')
 }
 
+middlewareObj.checkIfLoggedIn = (req, res, next) => {
+    if (!req.user) {
+        res.locals.isLoggedInError = true;
+        res.redirect('/login');
+    }else{
+        console.log("ERHER")
+    }
+    next();
+}
+
 middlewareObj.checkisAdmin = function (req, res, next) {
+    console.log(req.user)
     if (req.user) {
-        next()
+        if(req.user.isAdmin == 1){
+            next();
+        }else{
+            res.redirect('back')
+        }
         // if (req.user.acc_type == "admin") {
         //     console.log("ADMIN")
         //     next()

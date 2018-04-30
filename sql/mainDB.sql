@@ -2,7 +2,9 @@ CREATE TABLE user(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 email VARCHAR(256),
 password VARCHAR(256),
 fullname VARCHAR(256),
-nickname varchar(50))ENGINE=InnoDB;
+nickname varchar(50),
+isAdmin BOOLEAN DEFAULT FALSE
+)ENGINE=InnoDB;
 
 
 CREATE TABLE categories(
@@ -13,17 +15,28 @@ CREATE TABLE categories(
     foreign KEY (parent_id) references categories(id)
 )ENGINE=InnoDB;
 
-Create table products(id INT AUTO_INCREMENT PRIMARY KEY,
- name varchar(100),
+Create table products(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name varchar(100),
 image varchar(150),
 price double(10,2),
 description varchar(200),
-longDesc varchar(600),
+longDesc TEXT(65530),
 category_id int,
 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 isDeleted boolean DEFAULT FALSE,
 foreign key (category_id) references categories(id)
- )ENGINE=InnoDB;
+)ENGINE=InnoDB;
+
+
+CREATE TABLE product_image(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    imageName VARCHAR(256),
+    product_id INT,
+    image VARCHAR(256),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+)ENGINE=InnoDB;
+
 
  create table user_addr(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -94,12 +107,18 @@ CREATE TABLE paypalOrder(
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     amount double(10,2),
     productId INT,
-    response TEXT(65530)
+    response TEXT(65530),
+    userId INT,
+    FOREIGN KEY (userId) REFERENCES user(id)
+
 )ENGINE=InnoDB;
 
 
 CREATE TABLE paypalAmount(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     paypalId VARCHAR(256),
-    amount VARCHAR(256)
+    amount VARCHAR(256),
+    userId INT,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES user(id)
 )ENGINE=InnoDB;

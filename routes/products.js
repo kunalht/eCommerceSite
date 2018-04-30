@@ -22,28 +22,32 @@ var multerOptions = {
 var upload = multer(multerOptions)
 
 function resize(req, res, next) {
-      if (!req.file) {
+      if (!req.files) {
             next()
       } else {
-            var extension = req.file.mimetype.split('/')[1]
-            req.body.photo = uuid.v4() + "." + extension
-            // fs.mkdir("images/")
-            // console.log(req.body.photo)
-            var photo = jimp.read(req.file.buffer)
-            // console.log(photo)
-            jimp.read(req.file.buffer, function (err, image) {
-                  image.resize(536, 498)
-                  // image.resize(600, jimp.AUTO)
-                  image.write("images/" + req.body.photo)
+            req.body.photos = [];
+            req.files.forEach((file) => {
+                  var extension = file.mimetype.split('/')[1]
+                  let imageName = uuid.v4() + "." + extension;
+                  req.body.photos.push(imageName);
+                  // fs.mkdir("images/")
+                  // console.log(req.body.photo)
+                  var photo = jimp.read(file.buffer)
+                  // console.log(photo)
+                  jimp.read(file.buffer, function (err, image) {
+                        image.resize(536, 498)
+                        // image.resize(600, jimp.AUTO)
+                        image.write("images/" + imageName)
+                  })
             })
-
-            // photo.resize(600, jimp.AUTO)
             next()
       }
 }
+
 router.get("/products", productMiddleware.getAllProducts)
 router.get("/products/new", middlewareObj.checkisAdmin, productMiddleware.getNewProductForm)
-router.post("/products", upload.single('photo'), resize, productMiddleware.addNewProduct)
+// router.get("/products/new", productMiddleware.getNewProductForm)
+router.post("/products", upload.array('photo'), resize, productMiddleware.addNewProduct)
 router.get("/product/:id",productMiddleware.getProduct)
 
 module.exports = router;
