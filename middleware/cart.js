@@ -13,7 +13,7 @@ const c = new client({
 
 cartMiddleware.addToCart = function (req, res) {
         //check if item already exist with for loop
-        c.query('SELECT * FROM CART WHERE user_id=:userid AND item_id=:itemid', {
+        c.query('SELECT * FROM cart WHERE user_id=:userid AND item_id=:itemid', {
                 userid: req.user.id,
                 itemid: req.params.id
             },
