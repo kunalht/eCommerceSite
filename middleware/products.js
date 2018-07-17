@@ -142,19 +142,18 @@ productMiddleware.addNewProduct = (req, res) => {
 }
 
 productMiddleware.getProduct = (req, res) => {
-
+	let product_id = req.params.id;
     c.query('select C.name AS cname,C.parent_id AS cparent,C2.name AS parentName,C.id AS id' +
         ' from categories AS C left join categories AS C2 ON C.parent_id = C2.id', (err, categories) => {
             if (err) {
                 console.log(err)
             } else {
-                c.query('select * from products JOIN product_image ON products.id = product_image.product_id where products.id=:id', {
+                c.query('select * from products LEFT  JOIN product_image ON products.id = product_image.product_id where products.id=:id', {
                     id: product_id
                 }, (err, foundProduct) => {
                     if (err) {
                         console.log(err)
                     } else {
-                        console.log(foundProduct.length)
                         res.render('products/show', {
                             product: foundProduct,
                             categories: categories
@@ -163,8 +162,6 @@ productMiddleware.getProduct = (req, res) => {
                 })
             }
         })
-
-    let product_id = req.params.id
 
 }
 
