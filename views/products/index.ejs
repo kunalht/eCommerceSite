@@ -8,8 +8,51 @@
 
 	<section>
 		<div class="container">
-			<div class="row">
-					<% include ../partials/categories.ejs %>
+			<div class="row">           
+				 <!--    Categories     -->
+
+				<div class="col-sm-3">
+						<div class="left-sidebar">
+								<h2>Category</h2>
+								<div class="panel-group category-products" id="accordian">
+									<% categories.forEach( (category) => {  %>
+										<% if(category.cparent == null){ %>
+											<div class="panel panel-default">
+											<div class="panel-heading">
+												<h4 class="panel-title">
+													<a data-toggle="collapse" data-parent="#accordian" href="#<%= category.cname.replace(/ /g,'') %>">
+															<span data-toggle="collapse" data-parent="#accordian"  href="#<%= category.cname %>"><%= category.cname %> </span>
+															<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+														<!-- </a> -->
+												</h4>
+											</div>
+											<div id="<%= category.cname.replace(/ /g,'') %>" class="panel-collapse collapse">
+												<div class="panel-body">
+													<ul>
+	
+														<% products.forEach((product) => { %>
+															<% if(product.category_id == category.id){ %>
+																<li><a href="/products/<%= product.id %>"> <%= product.name %> </a></li>
+	
+														   <% } %>
+														<% }) %>
+														<!-- <% categories.forEach( (cat) => { %>
+															<% if (cat.parentName == category.cname) { %>
+																<li><a href="/products?cat=<%= cat.id %>"> <%= cat.cname %> </a></li>
+															<% } %>
+															<% }) %> -->
+													</ul>
+												</div>
+											</div>
+										</div>
+										<% } %>
+									<% }) %>
+								</div>
+							</div>
+				</div>
+	
+				<!-- End categories -->
+					
 				<div class="col-sm-9 padding-right">
 					<div class="features_items">
 						<!--features_items-->

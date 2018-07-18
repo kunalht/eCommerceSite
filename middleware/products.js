@@ -77,12 +77,16 @@ productMiddleware.getAllProducts = (req, res) => {
                     console.log(err)
                 } else {
                     c.query('select C.name AS cname,C.parent_id AS cparent,C2.name AS parentName,C.id AS id' +
-                        ' from categories AS C left join categories AS C2 ON C.parent_id = C2.id', (err, categories) => {
+                    ' from categories AS C left join categories AS C2 ON C.parent_id = C2.id', (err, categories) => {
+                    // c.query('select C.name AS cname,C.parent_id AS cparent,C2.name AS parentName,C.id AS id' +
+                    //     ' from categories AS C left join categories AS C2 ON C.parent_id = C2.id', (err, categories) => {
                             if (err) {
                                 console.log(err)
                             } else {
+                                //Get all products and match it with categories
                                 let count = totalProducts[0].c
                                 let pages = Math.floor(count / productsInOnePage + 1)
+                                console.log(products)
                                 res.render("products/index", {
                                     products: products,
                                     page: page,
