@@ -158,7 +158,7 @@ productMiddleware.getProduct = (req, res) => {
             if (err) {
                 console.log(err)
             } else {
-                c.query('select * from products LEFT  JOIN product_image ON products.id = product_image.product_id where products.id=:id', {
+                c.query('select *,id AS product_id from products LEFT  JOIN product_image ON products.id = product_image.product_id where products.id=:id', {
                     id: product_id
                 }, (err, foundProduct) => {
                     if (err) {

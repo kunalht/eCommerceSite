@@ -113,7 +113,7 @@
                                 </span>
                                 <% if(currentUser && currentUser.isAdmin){ %>
                                     <%= product[0].id %>
-                                <form action="/products/<%= product[0].id %>?_method=DELETE" method="POST">
+                                <form action="/products/<%= product[0].product_id %>?_method=DELETE" method="POST">
                                     <input class="btn btn-danger" type="submit" value="Delete product">
                                 </form>
                                 <% } %>
