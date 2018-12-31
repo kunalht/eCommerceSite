@@ -93,7 +93,6 @@ productMiddleware.getAllProducts = (req, res) => {
                                 //Get all products and match it with categories
                                 let count = totalProducts[0].c
                                 let pages = Math.floor(count / productsInOnePage + 1)
-                                console.log(products)
                                 res.render("products/index", {
                                     products: products,
                                     page: page,
