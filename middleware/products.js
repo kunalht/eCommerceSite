@@ -45,7 +45,13 @@ function resize(req, res, next) {
     }
 }
 
-
+productMiddleware.deleteProduct = (req, res) => {
+    let product_id = req.params.id;
+    let query = `UPDATE products SET isDeleted = TRUE WHERE products.id = ${product_id}`;
+    c.query(query, (err, deletedProduct) => {
+        res.redirect('back')
+    })
+}
 productMiddleware.getAllProducts = (req, res) => {
     let page
     if (req.query.page == null) {

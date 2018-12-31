@@ -111,8 +111,13 @@
                                         Place Order
                                     </a>
                                 </span>
+                                <% if(currentUser.isAdmin){ %>
+                                <form action="/products/<%= product[0].id %>?_method=DELETE" method="POST">
+                                    <input class="btn btn-danger" type="submit" value="Delete product">
+                                </form>
+                                <% } %>
                                 <p>
-                                    <b>Delivery Time:</b> 48 Hours </p>
+                                    <b>Delivery Time:</b> Within 48 Hours </p>
                             </div>
                             <!--/product-information-->
                         </div>

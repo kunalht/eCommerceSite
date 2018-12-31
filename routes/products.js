@@ -46,6 +46,7 @@ function resize(req, res, next) {
 
 router.get("/products", productMiddleware.getAllProducts)
 router.get("/products/new", middlewareObj.checkisAdmin, productMiddleware.getNewProductForm)
+router.delete("/products/:id", middlewareObj.checkisAdmin, productMiddleware.deleteProduct)
 // router.get("/products/new", productMiddleware.getNewProductForm)
 router.post("/products", upload.array('photo'), resize, productMiddleware.addNewProduct)
 router.get("/product/:id",productMiddleware.getProduct)
