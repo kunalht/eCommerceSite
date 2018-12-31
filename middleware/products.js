@@ -49,6 +49,7 @@ productMiddleware.deleteProduct = (req, res) => {
     let product_id = req.params.id;
     let query = `UPDATE products SET isDeleted = TRUE WHERE products.id = ${product_id}`;
     c.query(query, (err, deletedProduct) => {
+        console.log(deletedProduct)
         res.redirect('back')
     })
 }

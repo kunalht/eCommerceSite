@@ -111,7 +111,7 @@
                                         Place Order
                                     </a>
                                 </span>
-                                <% if(currentUser.isAdmin){ %>
+                                <% if(currentUser && currentUser.isAdmin){ %>
                                 <form action="/products/<%= product[0].id %>?_method=DELETE" method="POST">
                                     <input class="btn btn-danger" type="submit" value="Delete product">
                                 </form>
