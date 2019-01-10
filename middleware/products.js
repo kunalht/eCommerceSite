@@ -1,17 +1,20 @@
-const client = require('mariasql'),
+const client = require('mysql'),
     multer = require('multer'),
     jimp = require('jimp'),
     uuid = require('uuid'),
     mysqlAuth = require('../config/mysqlAuth')
 
 const productMiddleware = {}
-const c = new client({
+const c = client.createConnection({
     host: mysqlAuth.mysqlAuth.host,
     user: mysqlAuth.mysqlAuth.user,
     password: mysqlAuth.mysqlAuth.password,
     port: mysqlAuth.mysqlAuth.port,
-    db: mysqlAuth.mysqlAuth.db
+    database: mysqlAuth.mysqlAuth.db
 })
+
+c.connect();
+
 var multerOptions = {
     storage: multer.memoryStorage(),
     fileFilter(req, file, next) {
@@ -76,6 +79,8 @@ productMiddleware.getAllProducts = (req, res) => {
         countQuery = `select count(*) as c from products where isDeleted = false`
     }
     c.query(query, (err, products) => {
+        console.log(products)
+        console.log("HERE")
         if (err) {
             console.log(err)
         } else {
@@ -176,6 +181,6 @@ productMiddleware.getProduct = (req, res) => {
 }
 
 
-c.end()
+
 
 module.exports = productMiddleware

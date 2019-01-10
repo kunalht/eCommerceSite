@@ -1,6 +1,6 @@
 const express = require("express"),
     app = express(),
-    client = require('mariasql'),
+    client = require('mysql'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     cookieParser = require('cookie-parser'),
@@ -18,12 +18,12 @@ const express = require("express"),
 
 
 
-const c = new client({
+const c = client.createConnection({
     host: mysqlAuth.mysqlAuth.host,
     user: mysqlAuth.mysqlAuth.user,
     password: mysqlAuth.mysqlAuth.password,
     port: mysqlAuth.mysqlAuth.port,
-    db: mysqlAuth.mysqlAuth.db
+    database: mysqlAuth.mysqlAuth.db
 })
 
 app.use(require("express-session")({
@@ -56,7 +56,8 @@ passport.use(new LocalStrategy({
 },
     function (req, email, password, done) {
         console.log("register")
-        c.query("select * from user where email= :email", { email: email }, function (err, rows) {
+        let query = client.format('select * from user where email=?',[email])
+        c.query(query, function (err, rows) {
             if (err) {
                 return done(err)
             } else {
@@ -68,9 +69,10 @@ passport.use(new LocalStrategy({
                     newUser.email = email
                     newUser.password = password
                     var hash = bcrypt.hashSync(password)
-                    c.query('insert into user (email, password,loginwith) values (:email,:password,"email")',
-                        { email: newUser.email, password: hash },
+                    let query = client.format('insert into user (email, password,loginwith) values (?,?,"email")',[newUser.email, hash])
+                    c.query((query),
                         function (err, rows) {
+                            console.log(rows)
                             req.login(newUser, function (err) {
                                 if (err) {
                                     console.log(err)
@@ -91,7 +93,7 @@ passport.use('local-login', new LocalStrategy({
     passReqToCallback: true
 },
     function (req, email, password, done) {
-        c.query("select * from user where email=:email", { email: email }, function (err, foundUser) {
+        c.query(`select * from user where email=${email}`,  function (err, foundUser) {
             if (err) {
                 console.log(err)
                 // return done(err)
@@ -165,7 +167,7 @@ const indexRoutes = require("./routes/index"),
     orderRoutes = require("./routes/order"),
     adminRoutes = require("./routes/adminRoutes")
 
-c.end()
+
 
 
 app.use(indexRoutes)

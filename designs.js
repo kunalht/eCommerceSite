@@ -1,6 +1,6 @@
 const express = require("express"),
     app = express(),
-    client = require('mariasql'),
+    client = require('mysql'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     cookieParser = require('cookie-parser'),
@@ -18,12 +18,12 @@ const express = require("express"),
 
 
 
-const c = new client({
+const c = client.createConnection({
     host: mysqlAuth.mysqlAuth.host,
     user: mysqlAuth.mysqlAuth.user,
     password: mysqlAuth.mysqlAuth.password,
     port: mysqlAuth.mysqlAuth.port,
-    db: mysqlAuth.mysqlAuth.db
+    database: mysqlAuth.mysqlAuth.db
 })
 
 app.use(require("express-session")({
@@ -172,7 +172,7 @@ const indexRoutes = require("./routes/index"),
     orderRoutes = require("./routes/order"),
     adminRoutes = require("./routes/adminRoutes")
 
-c.end()
+
 
 
 app.use(indexRoutes)

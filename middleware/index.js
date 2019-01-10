@@ -1,5 +1,5 @@
 const passport = require("passport"),
-    client = require('mariasql'),
+    client = require('mysql'),
     bcrypt = require("bcrypt-nodejs"),
     mysqlAuth = require('../config/mysqlAuth')
 
@@ -7,12 +7,12 @@ const passport = require("passport"),
 
 const middlewareObj = {};
 
-const c = new client({
+const c = client.createConnection({
     host: mysqlAuth.mysqlAuth.host,
     user: mysqlAuth.mysqlAuth.user,
     password: mysqlAuth.mysqlAuth.password,
     port: mysqlAuth.mysqlAuth.port,
-    db: mysqlAuth.mysqlAuth.db
+    database: mysqlAuth.mysqlAuth.db
 })
 
 middlewareObj.getLogin = function (req, res) {
@@ -74,5 +74,5 @@ middlewareObj.loginfb = function (req, res) {
     }
 }
 
-c.end()
+
 module.exports = middlewareObj

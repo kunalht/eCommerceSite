@@ -1,12 +1,12 @@
-const client = require('mariasql')
+const client = require('mysql')
 
 
-const c = new client({
+const c = client.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'kunal',
     port: 3306,
-    db: 'ddif'
+    database: 'ddif'
 })
 
 // c.query('create table ss')
@@ -44,4 +44,3 @@ const c = new client({
 //     console.log(rows)
 // })
 // c.query('create table customers(fname varchar(20))')
-c.end()

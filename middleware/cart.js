@@ -1,14 +1,14 @@
-const client = require('mariasql'),
+const client = require('mysql'),
     session = require('express-session'),
     mysqlAuth = require('../config/mysqlAuth');
 
 const cartMiddleware = {}
-const c = new client({
+const c = client.createConnection({
     host: mysqlAuth.mysqlAuth.host,
     user: mysqlAuth.mysqlAuth.user,
     password: mysqlAuth.mysqlAuth.password,
     port: mysqlAuth.mysqlAuth.port,
-    db: mysqlAuth.mysqlAuth.db
+    database: mysqlAuth.mysqlAuth.db
 })
 
 cartMiddleware.addToCart = function (req, res) {
@@ -79,6 +79,6 @@ cartMiddleware.removeFromCart = function (req, res) {
         }
     })
 }
-c.end()
+
 
 module.exports = cartMiddleware
